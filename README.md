@@ -12,9 +12,9 @@
          Enjoy your Oats!            
 ```
 
-These are some of the InfoSec / Pen-testing notes I made during PWK OSCP. 
+These are some of the InfoSec / Pen-testing notes I made during CTFs, HackTheBox and PWK OSCP.
 
-I am slowly collecting and cleaning these up for my own use.
+I am slowly collecting and cleaning these up for my own use. Maybe they are useful for you as well.
 
 ## Essentials
 
@@ -27,12 +27,13 @@ I am slowly collecting and cleaning these up for my own use.
 - HTTP
     - WFuzz
     - Nikto
-    
-
+- DNS
+- Other Tools
 
 ## Web Exploitation
 - LFI / RFI
 - [SQL Injections](./web_exploitation/sql_injection.md)
+- SQLMap
 - Wordpress and xmlrpc
 - CSRF
 - CSS

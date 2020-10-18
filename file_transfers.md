@@ -13,7 +13,8 @@ Ever had to work with a remote host that seemed to resist any attempt to transfe
 5. [SSH/SCP](./file_transfers.md#sshscp)
 6. [Python](./file_transfers.md#python)
 7. [PHP](./file_transfers.md#php)
-8. [Copy&Paste](./file_transfers.md#copy-paste)
+8. [NFS](./file_transfers.md#nfs)
+9. [Copy&Paste](./file_transfers.md#copy-paste)
 
 ## FTP
 
@@ -569,6 +570,26 @@ Example usage:
 * `http://target.host/webshell.php?cmd=whoami`
 * `http://target.host/webshell.php?upload=linpeas.sh`
 
+
+## NFS
+
+Show available shares on an NFS server:
+```bash
+showmount -e 192.168.0.42
+```
+
+Mount an NFS share:
+
+```bash
+mkdir /tmp/infosec
+mount -t nfs 192.168.0.42:/someshare /tmp/infosec
+```
+
+Unmount:
+
+```bash
+umount /tmp/infosec
+```
 
 ## Copy-Paste
 ```default
