@@ -24,9 +24,11 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 
 ## Network Recon
 - Nmap
-- HTTP
+- [HTTP](./network_recon/http.md)
     - WFuzz
     - Nikto
+    - Wordpress and xmlrpc
+- SMB
 - DNS
 - Other Tools
 
@@ -34,7 +36,6 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - LFI / RFI
 - [SQL Injections](./web_exploitation/sql_injection.md)
 - SQLMap
-- Wordpress and xmlrpc
 - CSRF
 - CSS
 
