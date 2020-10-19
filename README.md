@@ -12,7 +12,7 @@
          Enjoy your Oats!            
 ```
 
-These are some of the InfoSec / Pen-testing notes I made during CTFs, HackTheBox and PWK OSCP.
+These are some of the InfoSec / Pen-testing notes I made during CTFs, HackTheBox and the usual certificates.
 
 I am slowly collecting and cleaning these up for my own use. Maybe they are useful for you as well.
 
@@ -21,6 +21,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - [File Transfers](./file_transfers.md)
 - Reverse Shell One-Liners
 - [MSFVenom Cheatsheet](./msfvenom_cheatsheet.md)
+- Wordlists
 
 ## Network Recon
 - Nmap
@@ -37,7 +38,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - [SQL Injections](./web_exploitation/sql_injection.md)
 - SQLMap
 - CSRF
-- CSS
+- XSS
 
 ## Privilege Escalation
 - Linux Local Enumeration
@@ -63,8 +64,8 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 
 ## Binary Exploitation
 
+- Binary inspect tools
 - Basic Buffer Overflows
-- Binary tools
 - Return Oriented Programming (ROP)
 
 

