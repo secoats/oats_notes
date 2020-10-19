@@ -56,7 +56,7 @@ Like always google for exploits if you know the name of the webapp. Knowing the 
 4. Check for SQL Injections
 5. Google for default credentials (If you know the name of the webapp) 
 6. Check for "username is wrong" type info leaks
-7. Search for possible usernames on the wider site ("About Us", ssl cert, etc.)
+7. Search for possible usernames on the wider site ("About Us", ssl cert, github, social media, etc.)
 8. Try to create a low privilege user. Enumerate username-format, password requirements, etc. Also even low priv users sometimes can see sensitive data.
 9. Check password reset rules
 
