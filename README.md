@@ -24,7 +24,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - Wordlists
 
 ## Network Recon
-- Nmap
+- [Nmap](./network_recon/nmap.md)
 - [HTTP](./network_recon/http.md)
     - WFuzz
     - Nikto
