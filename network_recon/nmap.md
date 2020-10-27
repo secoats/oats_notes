@@ -64,6 +64,11 @@ nmap -sV -p139,445 --script=smb-protocols,smb-vuln* $ip
 nmap -vv --reason -Pn -sV -p 80,443 "--script=banner,(http* or ssl*) and not (brute or broadcast or dos or external or http-slowloris* or fuzzer)" $ip
 ```
 
+## SSH scan
+```bash
+nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey,ssh-auth-methods $ip
+```
+
 ## Scripts
 ```bash
 ls -al /usr/share/nmap/scripts/
@@ -107,3 +112,4 @@ ls -al /usr/share/nmap/scripts/
 
 * https://gtfobins.github.io/gtfobins/nmap/
 * https://archive.today/CkonW
+

