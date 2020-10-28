@@ -179,6 +179,7 @@ meterpreter> run post/windows/gather/checkvm
 ```
 
 ## Pivoting
+### SOCKS proxy
 
 Scenario: you have a meterpreter shell (let's say #7) on a machine that is double-homed with a network interface leading to another subnet 10.8.8.0/24
 
@@ -207,7 +208,8 @@ proxychains nmap -T4 -F 10.8.8.42
 ...in order to scan a machine in the other subnet. 
 You will probably only be able to TCP CONNECT scan through the socks proxy.
 
-You can create a FoxyProxy settting in order to visit websites.
+You can create a FoxyProxy setting in order to visit websites in the subnet with Firefox. Make sure to set it to SOCKS4 instead of the default HTTP.
+
 
 ### Single port forward
 
