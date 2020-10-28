@@ -207,6 +207,17 @@ proxychains nmap -T4 -F 10.8.8.42
 ...in order to scan a machine in the other subnet. 
 You will probably only be able to TCP CONNECT scan through the socks proxy.
 
+You can create a FoxyProxy settting in order to visit websites.
 
+### Single port forward
 
+Some actions works better with a singular port forward instead of SOCKS, such as database interaction or FTP.
+
+```bash
+meterpreter> portfwd add -l 3389 -p 3389 -r [target host]
+
+# -l [local-listening-port]
+# -p [destination-port]
+
+```
 
