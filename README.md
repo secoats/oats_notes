@@ -30,7 +30,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
     - WFuzz
     - Nikto
     - Wordpress and xmlrpc
-- SMB
+- [SMB](./network_recon/smb.md)
 - DNS
 - Other Tools
 
