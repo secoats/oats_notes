@@ -190,7 +190,7 @@ meterpreter> run post/windows/gather/checkvm
 
 ### Kiwi
 
-Use Mimikatz features in a Meterpreter shell.
+Use Mimikatz features in a Meterpreter shell. Be warned though, this might crash your meterpreter shell if the target host is too old to support Mimikatz. 
 
 ```bash
 meterpreter> load kiwi

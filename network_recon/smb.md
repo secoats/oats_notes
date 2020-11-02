@@ -22,6 +22,12 @@ An overview of SMB enum tools and clients.
 * [Metasploit modules](./smb.md#metasploit-modules)
 
 
+Nmap command for SMB vuln scanning:
+
+```bash
+sudo nmap -sV -p139,445 --script=smb-protocols,smb-vuln* $ip
+```
+
 ## File Transfers
 
 Yes, you can also use it as intended.
@@ -98,10 +104,22 @@ rpcclient -U 'username%password' 10.10.10.149
 
 ```
 
-Print username or SID:
+Enumerate domain users:
+```bash
+rpcclient> enumdomusers
+rpcclient> queryuser 0x3e8
+```
+
+Enumerate domain groups:
+```bash
+rpcclient> enumdomgroups
+rpcclient> querygroup 0x204
+rpcclient> querygroupmem 0x204
+```
+
+Print username or SID (increment SID to find more users):
 ```bash
 rpcclient> lookupnames <username/sid>
-# hint: you can increment the SID to find more users
 ```
 
 ## SMBMap
@@ -315,3 +333,4 @@ auxiliary/scanner/smb/impacket/wmiexec
 ```bash
 auxiliary/scanner/smb/smb_enumshares
 ```
+
