@@ -19,55 +19,68 @@
 
 ## Full TCP all ports
 ```bash
-nmap -p 1-65535 -T4 -A -v $ip
-nmap -vv --reason -Pn -A --osscan-guess --version-all -p- $ip
+sudo nmap -p 1-65535 -T4 -A -v $ip
+sudo nmap -vv --reason -Pn -A --osscan-guess --version-all -p- $ip
 ```
 
 ## Ipp setting
 ```bash
-nmap -sC -sV -oA nmap_output.txt $ip
+sudo nmap -sC -sV -oA nmap_output.txt $ip
 ```
 
 ## Full scan with UDP
 ```bash
-nmap -sS -sU -T4 -A -v $ip
+sudo nmap -sS -sU -T4 -A -v $ip
 ```
 
 ## UDP top 20
 ```bash
-nmap -vv --reason -Pn -sU -A --top-ports=20 --version-all
+sudo nmap -vv --reason -Pn -sU -A --top-ports=20 --version-all
 ```
 
 ## Ping scan (No port scan) 
 ```bash
-nmap -sn $ip
+sudo nmap -sn $ip
 ```
 
 ## Quick Scan
 ```bash
-nmap -T4 -F $ip
+sudo nmap -T4 -F $ip
 ```
 
 ## Quick Scan Plus
 ```bash
-nmap -sV -T4 -O -F --version-light $ip
+sudo nmap -sV -T4 -O -F --version-light $ip
 ```
 
 ## SMB scan
 ```bash
-nmap -sV -p139,445 --script=smb-vuln* $ip
-nmap -sV -p139,445 --script=smb-protocols,smb-vuln* $ip
+sudo nmap -sV -p139,445 --script=smb-vuln* $ip
+sudo nmap -sV -p139,445 --script=smb-protocols,smb-vuln* $ip
 ```
 
 ## HTTP scan
 ```bash
-nmap -vv --reason -Pn -sV -p 80,443 "--script=banner,(http* or ssl*) and not (brute or broadcast or dos or external or http-slowloris* or fuzzer)" $ip
+sudo nmap -vv --reason -Pn -sV -p 80,443 "--script=banner,(http* or ssl*) and not (brute or broadcast or dos or external or http-slowloris* or fuzzer)" $ip
 ```
 
 ## SSH scan
 ```bash
-nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey,ssh-auth-methods $ip
+sudo nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey,ssh-auth-methods $ip
 ```
+
+## FTP scan
+
+```bash
+sudo nmap -vv --reason -Pn -sV -p 21 "--script=banner,(ftp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" $ip
+```
+
+## SMTP scan
+
+```bash
+sudo nmap -vv --reason -Pn -sV -p 25 "--script=banner,(smtp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" $ip
+```
+
 
 ## Scripts
 ```bash

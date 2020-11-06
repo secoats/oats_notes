@@ -19,6 +19,7 @@ An overview of SMB enum tools and clients.
 * [enum4linux](./smb.md#enum4linux)
 * [Impacket](./smb.md#impacket)
 * [SMB Code Execution](./smb.md#smb-code-execution)
+* [Banner Grabbing](./smb.md#banner-grabbing)
 * [Metasploit modules](./smb.md#metasploit-modules)
 
 
@@ -27,6 +28,16 @@ Nmap command for SMB vuln scanning:
 ```bash
 sudo nmap -sV -p139,445 --script=smb-protocols,smb-vuln* $ip
 ```
+
+In order to interact with very old SMB protocols, update your `/etc/samba/smb.conf` with:
+
+```bash
+[global]
+client min protocol = LANMAN1
+```
+
+Obviously lowering your supported min SMB protocol version to ancient sumeric is a security risk, but I asssume you know what you are doing.
+
 
 ## File Transfers
 
@@ -56,7 +67,7 @@ The regular smbclient, which can be found on most Linux distros.
 
 ```bash
 # List shares
-smbclient -U anonymous -L //10.10.10.130/sharename
+smbclient -U anonymous -L //10.10.10.130
 
 # Interact with share
 smbclient -U anonymous //10.10.10.130/sharename
@@ -309,6 +320,27 @@ sudo apt install freerdp-x11
 
 freerdp-x11 /u:offsec /d:somedomain /pth:aad3b435b51404eeaad3b435b51404ee:0CB6948805F797BF2A82807973B89537 /v:10.10.10.102
 ```
+
+
+## Banner Grabbing
+
+Sometimes a server will not give you a banner to grab when you connect or scan with nmap, but you need it in order to enumerate for vulnerabilities. 
+
+The following works with Samba.
+
+Listen on the interface ("tun0" is your interface):
+
+```bash
+sudo ngrep -i -d tun0 's.?a.?m.?b.?a.*[[:digit:]]'
+```
+
+Connect to the server:
+```bash
+smbclient -L <ip>
+```
+
+Also try Wireshark, if the above is not successful.
+
 
 ## Metasploit modules
 

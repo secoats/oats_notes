@@ -14,7 +14,8 @@ Ever had to work with a remote host that seemed to resist any attempt to transfe
 6. [Python](./file_transfers.md#python)
 7. [PHP](./file_transfers.md#php)
 8. [NFS](./file_transfers.md#nfs)
-9. [Copy&Paste](./file_transfers.md#copy-paste)
+9. [RDP](./file_transfers.md#rdp)
+10. [Copy&Paste](./file_transfers.md#copy-paste)
 
 ## FTP
 
@@ -597,6 +598,16 @@ Unmount:
 umount /tmp/infosec
 ```
 
+## RDP
+
+```bash
+mkdir /tmp/shareme
+rdesktop 192.168.0.42 -r disk:share=/tmp/shareme
+```
+
+Once you log into an account on the remote machine you will find the shared directory in the file explorer under network places.
+
+
 ## Copy-Paste
 ```default
  _______  _______  ______    ___        _     _______ 
@@ -672,11 +683,17 @@ Encode with Powershell:
 $pwd =[System.Text.Encoding]::UTF8.GetBytes("Ein Test")
 [Convert]::ToBase64String($pwd)
 ```
+```default
+$base64string = [Convert]::ToBase64String([IO.File]::ReadAllBytes($FileName))
+```
 
 Decode with Powershell:
 ```default
 $pwd = [Convert]::FromBase64String("RWluIFRlc3Q=")
 [System.Text.Encoding]::UTF8.GetString($pwd)
+```
+```default
+[IO.File]::WriteAllBytes($FileName, [Convert]::FromBase64String($base64string))
 ```
 
 #### Python
