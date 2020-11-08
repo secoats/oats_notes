@@ -429,7 +429,7 @@ scp <source> <destination>
 
 Example:
 ```bash
-scp SourceFile user@host:directory/TargetFile
+scp SourceFile user@host:/directory/TargetFile
 ```
 
 Some Params:
