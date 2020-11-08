@@ -1,6 +1,19 @@
-# SSH
+# SSH - Secure Shell
 
-## Basic usage
+* [Basic Usage](./ssh.md#basic-usage)
+* [Common Errors](./ssh.md#common-errors)
+* [Permanent Access](./ssh.md#permanent-access)
+* [Bruteforce](./ssh.md#bruteforce)
+* [SSH Key Bruteforcing](./ssh.md#ssh-key-bruteforcing)
+* [File Transfers](./ssh.md#file-transfers)
+* [Port Forwarding](./ssh.md#port-forwarding)
+    * [Local Forward](./ssh.md#local-forward)
+    * [Remote Forward](./ssh.md#remote-forward)
+* [Pivoting](./ssh.md#pivoting)
+    * [Single Port Forward](./ssh.md#pivoting-single-port-forward)
+    * [Dynamic SOCKS Proxy](./ssh.md#pivoting-dynamic-socks-proxy)
+
+## Basic Usage
 
 ```bash
 ssh user@host
@@ -39,9 +52,13 @@ Stop local SSH server:
 sudo systemctl stop ssh.socket
 ```
 
-## Deal with errors
+## Common Errors
 
-Use nmap to figure out what key exchange methods and ciphers are supported. But the error usually tells you what is supported by the server too.
+Use nmap to figure out what key exchange methods and ciphers are supported. But the error usually tells you what is supported by the server.
+
+```bash
+sudo nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey,ssh-auth-methods $ip
+```
 
 Error: "no matching key exchange method..."
 ```bash
@@ -97,6 +114,20 @@ Hydra:
 ```bash
 hydra -l alexander -P /usr/share/seclists/Miscellaneous/wordlist-skipfish.fuzz.txt 10.0.0.11 -t 4 ssh
 proxychains hydra -l alexander -P /usr/share/seclists/Miscellaneous/wordlist-skipfish.fuzz.txt 10.0.0.11 -t 4 ssh
+```
+
+## SSH Key Bruteforcing
+
+```bash
+ssh2john id_rsa > id_rsa.hash
+john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa.hash
+```
+
+## File Transfers
+
+```bash
+scp <source> <destination>
+scp SourceFile user@host:directory/TargetFile
 ```
 
 ## Port Forwarding
@@ -185,7 +216,7 @@ Wherein `10.1.1.99:10080` forwards to `10.1.1.42:80`.
 
 Now users on the TARGET can visit `http://localhost:10080` and they will see the web server running on `http://10.1.1.42:80`.
 
-Please note that the remote forward permissions are determined by the SSH config for the TARGET SSH server. 
+Please note that the remote forward permissions are determined by the SSH config of the TARGET SSH server. 
 In the `/etc/ssh/sshd_config` of the TARGET you need to set `GatewayPorts yes` in order to bind a port globally (wildcard 0.0.0.0). Changing that config usually requires root access on TARGET.
 
 When bound to 0.0.0.0, then anybody in the nework can visit `http://10.1.1.99:10080` in order to access the web server running on `http://10.1.1.42:80`.
@@ -272,24 +303,13 @@ By default SSH will use SOCKS 5 which supports TCP and UDP tunneling, but you ca
 # -N  -- don't open shell
 # -C  -- compress connection (save bandwidth)
 # -q  -- quiet mode (don't print anything locally)
-# -f  -- fork to background command (like & basically)
-# -X  -- set SOCKS version 4 / 5 (default)
+# -f  -- fork to background process (you will need to use: kill <pid>)
+# -X  -- set SOCKS version 4 / 5 (default is 5)
 ```
 
-## SSH Key Bruteforcing
-
-```bash
-ssh2john id_rsa > id_rsa.hash
-john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa.hash
-```
-
-## File Transfers
-
-```bash
-scp <source> <destination>
-scp SourceFile user@host:directory/TargetFile
-```
 
 ## References
 
+* ssh(1) - Linux man page - https://linux.die.net/man/1/ssh
 * SSH Port Forwarding - https://zaiste.net/posts/ssh-port-forwarding/
+* OSCP: Understanding SSH Tunnels - https://medium.com/@falconspy/oscp-understanding-ssh-tunnels-519e31c698bf
