@@ -107,9 +107,9 @@ Example (you are Kali):
 ```bash
 ⎡   Kali    ⎤         ⎡     TARGET     ⎤
 ⎜ 10.1.1.42 ⎟ ======= ⎜    10.1.1.99   ⎟
-⎣           ⎦         ⎜ Open:       22 ⎟
-                      ⎜ Filtered: 3306 ⎟
-                      ⎣ Filtered: 8080 ⎦
+⎜           ⎟         ⎜ Open:       22 ⎟
+⎜           ⎟         ⎜ Filtered: 3306 ⎟
+⎣           ⎦         ⎣ Filtered: 8080 ⎦
 ```
 
 You have SSH access to the TARGET host. 
