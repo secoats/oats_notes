@@ -60,19 +60,19 @@ Use nmap to figure out what key exchange methods and ciphers are supported. But 
 sudo nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey,ssh-auth-methods $ip
 ```
 
-Error: "no matching key exchange method..."
+Error: **"no matching key exchange method..."**
 ```bash
 ssh user@host -oKexAlgorithms=+<key-exchange>
 ssh user@host -oKexAlgorithms=+diffie-hellman-group1-sha1
 ```
 
-Error: "no matching cipher..."
+Error: **"no matching cipher..."**
 ```bash
 ssh user@host -c <cipher>
 ssh user@host -c aes128-cbc
 ```
 
-Error: "key too open"
+Error: **"key too open"**
 ```bash
 chmod 400 ./id_rsa
 ```
@@ -116,6 +116,13 @@ hydra -l alexander -P /usr/share/seclists/Miscellaneous/wordlist-skipfish.fuzz.t
 proxychains hydra -l alexander -P /usr/share/seclists/Miscellaneous/wordlist-skipfish.fuzz.txt 10.0.0.11 -t 4 ssh
 ```
 
+### Username Bruteforce
+
+A noteworthy exploit is **"User enumeration in OpenSSH before version 7.7"** (CVE 2018-15473). 
+
+It allows you to bruteforce usernames that exist on the SSH server relatively easily (EDB 45233). 
+The relevant Metasploit module is called `scanner/ssh/ssh_enumusers`.
+
 ## SSH Key Bruteforcing
 
 ```bash
@@ -151,11 +158,18 @@ You want to forward that filtered MySQL port on TARGET to your own machine so yo
 
 ```bash
 # Local port forward. Access is limited to localhost
+# Syntax
 ssh -L <local-ip>:<local-port>:<target-host>:<target-port> <user@target>
-ssh -L 127.0.0.1:1337:10.1.1.99:3306 user@10.1.1.99
 
+# Example
+ssh -L 127.0.0.1:1337:10.1.1.99:3306 user@10.1.1.99
+```
+```bash
 # short-hand version
+# Syntax
 ssh -L <local-port>:<target-host>:<target-port> <user@target>
+
+# Example
 ssh -L 1337:10.1.1.99:3306 user@10.1.1.99
 ```
 
@@ -171,11 +185,18 @@ If you write 127.0.0.1 as local IP address then you will only be able to access 
 
 ```bash
 # Local port forward. Allow access to all IP addresses (wildcard)
+# Syntax
 ssh -L 0.0.0.0:<local-port>:<target-host>:<target-port> <user@target>
-ssh -L 0.0.0.0:1337:10.1.1.99:3306 user@10.1.1.99
 
-# short-hand version
+# Example
+ssh -L 0.0.0.0:1337:10.1.1.99:3306 user@10.1.1.99
+```
+```bash
+# Short-hand version. Local port forward
+# Syntax
 ssh -L :<local-port>:<target-host>:<target-port> <user@target>
+
+# Example
 ssh -L :1337:10.1.1.99:3306 user@10.1.1.99
 ```
 
@@ -196,10 +217,14 @@ There is an HTTP server running on your own machine (Kali) on port 80. You wish 
 On Kali you would run:
 ```bash
 # Remote forward. Open port on TARGET loopback interface.
+# Syntax
 ssh -R <target-port>:<forward-to-host>:<forward-to-port> user@target
-ssh -R 10080:127.0.0.1:80 user@target
 
-# Make port on target globally accessible (GatewayPorts yes)
+# Example
+ssh -R 10080:127.0.0.1:80 user@target
+```
+```bash
+# Optionally make port on target globally accessible (GatewayPorts yes)
 ssh -R 0.0.0.0:10080:127.0.0.1:80 user@target
 ```
 
@@ -263,13 +288,16 @@ You can either set up a forward to a single port on 10.8.8.77 or you can set up 
 ⎣ Port:8888 ⎦       ⎣ Port:  22 ⎦       ⎣ Port:  80 ⎦
 ```
 ```bash
+# Syntax
 ssh -L <localport>:<target>:<targethost> <user@bridge>
+
+# Example
 ssh -L 8888:10.8.8.77:80 pippin@10.1.1.33
 ```
 
-Just to be clear, you execute that ssh command on Kali.
+Just to be clear, you execute that ssh command on Kali. This will open port 8888 on Kali.
 
-Now you can visit `http://localhost:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77
+Now you can visit `http://localhost:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77:80
 
 
 ### Pivoting: Dynamic SOCKS Proxy
@@ -282,20 +310,47 @@ You can also set up a proxy with SSH in order to reach every host/port in the ta
 ⎣ Port:1337 ⎦       ⎣ Port:  22 ⎦       ⎣             ⎦
 ```
 ```bash
+# Syntax
 ssh -N -D <localport> -q -C -f <user@bridge>
+
+# Example
 ssh -N -D 1337 -q -C -f pippin@10.1.1.33
 ```
 
-Now you can use foxyproxy in your browser to create a SOCKS 5 profile pointing to `localhost:1337`. With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. http://10.8.8.222
+Now you can use **foxyproxy** in your browser to create a SOCKS 5 profile pointing to `localhost:1337`. With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. `http://10.8.8.222` with your browser.
 
-Similarly you can use any command line program that supports SOCKS proxies. For programs that do not, take a look at "proxychains".
+Similarly you can use any command line program that supports SOCKS proxies. 
 
-If you need to use a program that does not support proxies or if using proxies is not feasible, then just create a single port forward (see above) to access a single remote service. Especially when scanning a service that method is preferred.
+For programs that do not support SOCKS proxies, take a look at **proxychains** or **proxychains-ng**. The regular proxychains is available on Kali.
+```bash
+# [ Editing /etc/proxychains.conf ]
+# add our SOCKS proxy to /etc/proxychains.conf
+socks5 127.0.0.1 1337
 
-By default SSH will use SOCKS 5 which supports TCP and UDP tunneling, but you can also specify a version with `-X 4` which will use SOCKS 4 (only supports TCP).
+# Quiet mode (Optional. Less console spam from proxychains)
+quiet_mode
+```
+```bash
+# Nmap scan through proxychains using our SOCKS proxy
+# Scanning will be slow, so do not use service detection in a full TCP portscan
+proxychains nmap -sT -Pn -p- -T4 -v 10.8.8.47
 
+# Required are the options:
+# -sT  -- Use TCP connect scan (SYN-scan doesn't work through SOCKS)
+# -Pn  -- Disable Ping probe (ICMP doesn't go through SOCKS)
+```
 
-### Pivoting: Useful Params
+Once you have confirmed which ports are open, use focused nmap service scans on the open ports directly.
+
+If you need to use a program that does not work with proxychains or if using proxies is not feasible, then just create a single port forward (see above) to access a single remote service. Especially when scanning a service that method is preferred.
+
+Especially **directory or password bruteforcing should be done via single-port forward**, not via SOCKS proxy.
+
+By default SSH will use the SOCKS 5 protocol for dynamic forwards, which supports TCP and UDP tunneling, but you can also specify a version with `-X 4` which will use SOCKS 4 (only supports TCP).
+
+If SSH is not available, then you can also use meterpreter for pivoting. See the [Metasploit notes](./metasploit.md#pivoting).
+
+### Pivoting: Useful SSH Params
 
 ```bash
 # -L  -- local forward
