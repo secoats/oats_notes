@@ -54,7 +54,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
   - Kernel Exploits
 
 - [Windows Local Enumeration](./privilege_escalation/windows_local_enumeration.md)
-  - [Windows Commands Cheatsheet](./privilege_escalation/windows_commands_cheatsheet.md)
+  - [Windows Commands Cheatsheet](./privilege_escalation/windows/windows_commands_cheatsheet.md)
   - Windows Enum Scripts
   - Service Exploitation
   - [Potatoes](./privilege_escalation/windows/potatoes.md)
