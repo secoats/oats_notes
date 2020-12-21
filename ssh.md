@@ -317,7 +317,7 @@ ssh -N -D <localport> -q -C -f <user@bridge>
 ssh -N -D 1337 -q -C -f pippin@10.1.1.33
 ```
 
-Now you can use **foxyproxy** in your browser to create a SOCKS 5 profile pointing to `localhost:1337`. With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. `http://10.8.8.222` with your browser.
+Now you can use **FoxyProxy** in your browser to create a SOCKS 5 profile pointing to `localhost:1337`. With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. `http://10.8.8.222` with your browser.
 
 Similarly you can use any command line program that supports SOCKS proxies. 
 

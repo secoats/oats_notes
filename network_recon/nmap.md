@@ -75,6 +75,15 @@ sudo nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey
 sudo nmap -vv --reason -Pn -sV -p 21 "--script=banner,(ftp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" $ip
 ```
 
+## SNMP scan
+Simple Network Management Protocol (SNMP). Usually runs on UDP port 161.
+
+Enum:
+```bash
+sudo nmap -vv --reason -Pn -sU -sV -p 161 "--script=banner,(snmp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" $ip
+```
+
+
 ## SMTP scan
 
 ```bash

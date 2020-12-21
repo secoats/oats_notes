@@ -53,16 +53,13 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
   - NFS
   - Kernel Exploits
 
-- Windows Local Enumeration
+- [Windows Local Enumeration](./privilege_escalation/windows_local_enumeration.md)
+  - [Windows Commands Cheatsheet](./privilege_escalation/windows_commands_cheatsheet.md)
   - Windows Enum Scripts
-  - Stored Passwords
-  - Startup
   - Service Exploitation
-  - Scheduled Tasks
-  - Registry Exploits
-  - Potatoes
-  - Print Spoofer
-  - Misc
+  - [Potatoes](./privilege_escalation/windows/potatoes.md)
+  - Popular Exploits
+
 
 ## Binary Exploitation
 
