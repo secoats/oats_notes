@@ -54,7 +54,9 @@ accesschk.exe /accepteula -q -a SeServiceLogonRight
 
 Each user session on the system has an **access token**, which determines the **privileges** of that user logon session. Processes or threads started by a user usually have a limited subset of those privileges. Each process or thread has its own **access token** which determines the privileges it owns. Privileges can either be ENABLED or DISABLED. A disabled privilege might possibly be enabled later, but an absent or removed privilege cannot possibly be acquired again without creating a new token.
 
-Most of the time you are only interested in the privileges that are **both present and enabled**. But under certain circumstances you might be able to create a new token with more previliges and impersonate it. Enabling a disabled privilege usually requires a binary interacting with the Windows Security API with TOKEN_ADJUST_PRIVILEGES. At least I am not aware of a way to do it manually (let me know!).
+Most of the time you are only interested in the privileges that are **both present and enabled**. But under certain circumstances you might be able to create a new token with more previliges and impersonate it. 
+
+You can try to enable disabled privileges with this powershell script: https://github.com/fashionproof/EnableAllTokenPrivs
 
 
 #### Privileges: Instant Win Tier
