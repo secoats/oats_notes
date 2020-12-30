@@ -14,6 +14,7 @@ An overview of SMB enum tools and clients.
 
 * [File Transfers](./smb.md#file-transfers)
 * [Smbclient](./smb.md#smbclient)
+* [Rpcclient](./smb.md#rpcclient)
 * [SMBMap](./smb.md#smbmap)
 * [CrackMapExec](./smb.md#crackmapexec)
 * [enum4linux](./smb.md#enum4linux)
@@ -106,6 +107,8 @@ smbclient '\\server\share' -N -c 'prompt OFF;recurse ON;cd 'path\to\directory\';
 ```
 
 ## Rpcclient
+
+* Further reading: https://bitvijays.github.io/LFF-IPS-P3-Exploitation.html#rpclient
 
 Client for MS-RPC. Useful for (manually) enumerating users and groups, but see below for automatic enum tools.
 

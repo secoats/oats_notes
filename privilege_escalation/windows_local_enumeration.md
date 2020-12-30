@@ -1,7 +1,5 @@
 # Windows Local Enumeration
 
-Scenario: You have a low privilege shell on a Windows machine (with permission of the owner of course) and you wish to **elevate your privileges** (with permission of the owner of course).
-
 The commands here are all for cmd.exe unless specified otherwise. For powershell commands I write "`ps>`" before the command.
 
 * [Whoami?](#whoami)
