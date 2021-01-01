@@ -44,7 +44,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 
 ## Privilege Escalation
 - [Linux Local Enumeration](./privilege_escalation/linux_local_enumeration.md)
-  - [Linux Commands Cheatsheet](./privilege_escalation/linux/linux_commands_cheatsheet.md)
+  - [Commands Cheatsheet: Linux](./privilege_escalation/linux/linux_commands_cheatsheet.md)
   - Linux Enum Scripts
   - [SUDO](./privilege_escalation/linux/sudo.md)
   - [Cron](./privilege_escalation/linux/cron.md)
@@ -53,10 +53,11 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
   - [NFS](./privilege_escalation/linux/nfs.md)
 
 - [Windows Local Enumeration](./privilege_escalation/windows_local_enumeration.md)
-  - [Windows Commands Cheatsheet](./privilege_escalation/windows/windows_commands_cheatsheet.md)
+  - [Commands Cheatsheet: Windows](./privilege_escalation/windows/windows_commands_cheatsheet.md)
   - Windows Enum Scripts
-  - Service Exploitation
+  - [Service Exploitation](./privilege_escalation/windows/services.md)
   - [Potatoes](./privilege_escalation/windows/potatoes.md)
+  - [SeBackupPrivileges](./privilege_escalation/windows/sebackup.md)
   - Popular Exploits
 
 

@@ -484,3 +484,10 @@ $ cat /etc/exports
 ...
 /tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)
 ```
+
+## Refereences And Useful Links
+
+* g0tmilk - **Basic Linux Privilege Escalation** - https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
+* Tib3rius - **Linux Privilege Escalation for OSCP & Beyond!** (costs money) - https://www.udemy.com/course/linux-privilege-escalation/
+* hacktricks - **Linux Privilege Escalation** - https://book.hacktricks.xyz/linux-unix/privilege-escalation
+* https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md

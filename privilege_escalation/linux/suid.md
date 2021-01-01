@@ -259,5 +259,4 @@ Be wary that the injected command gets executed with every debug output of xtrac
 ## References
 
 * https://www.hackingarticles.in/linux-privilege-escalation-using-suid-binaries/
-* https://www.udemy.com/course/linux-privilege-escalation/
 * https://materials.rangeforce.com/tutorial/2019/11/07/Linux-PrivEsc-SUID-Bit/

