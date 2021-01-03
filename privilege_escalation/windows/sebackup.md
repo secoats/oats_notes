@@ -25,7 +25,7 @@ Copy-FileSeBackupPrivilege .\restricted_file.txt c:\temp\stolen.txt -Overwrite
 The `Set-SeBackupPrivilege` command will set our backup privs to "enabled" if there were "disabled" before.
 
 
-## Active directory
+## Diskshadow and Active directory
 
 The Security Account Manager (SAM) manages user account security on Windows. The usernames and hashes of all users are stored in the three registry hives: SAM, SYSTEM and SECURITY.
 

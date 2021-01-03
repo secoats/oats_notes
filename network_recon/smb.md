@@ -136,6 +136,25 @@ Print username or SID (increment SID to find more users):
 rpcclient> lookupnames <username/sid>
 ```
 
+```bash
+rpcclient> lookupnames <username/sid>
+```
+
+```bash
+# privileges
+enumprivs
+
+# shares
+netshareenum
+
+# server info
+srvinfo
+
+# printers
+enumprinters
+```
+
+
 ## SMBMap
 
 SMB Enum tool. Lists file content and permissions of shares. It can deal with different SMB versions better than the manual smbclient. 
