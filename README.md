@@ -57,7 +57,8 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
   - Windows Enum Scripts
   - [Service Exploitation](./privilege_escalation/windows/services.md)
   - [Potatoes](./privilege_escalation/windows/potatoes.md)
-  - [SeBackupPrivileges](./privilege_escalation/windows/sebackup.md)
+  - [SeBackupPrivilege](./privilege_escalation/windows/sebackup.md)
+  - [SeLoadDriverPrivilege](./privilege_escalation/windows/seloaddrivers.md)
   - Popular Exploits
 
 

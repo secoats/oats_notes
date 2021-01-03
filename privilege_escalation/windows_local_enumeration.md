@@ -61,12 +61,12 @@ You can try to enable disabled privileges with this powershell script: https://g
 
 #### Privileges: Instant Win Tier
 
-* **SeBackupPrivilege** - READ access to ALL files, ignoring ACL (access control list) restrictions (ignore file ownership). Use this to copy SAM, SYSTEM and SECURITY, from which you can extract Admin hashes. [More Info](./windows/sebackup.md)
+* **SeBackupPrivilege** - READ access to ALL files, ignoring ACL (access control list) restrictions (ignore file ownership). Use this to copy SAM, SYSTEM and SECURITY, from which you can extract Admin hashes. [More Info.](./windows/sebackup.md)
 * **SeRestorePrivilege** - Same as SeBackupPrivilege, but also allows WRITE access to any file.
 * **SeTakeOwnership** - Allows you to take ownership of any *object*, including NTFS files and folders, registry keys, printers, Active Directory objects, services, processes, and threads.
 * **SeAssignPrimaryToken** - Allows privesc to SYSTEM user with the [Potato exploits](./windows/potatoes.md). 
 * **SeImpersonatePrivilege** - Allows privesc to SYSTEM user with the [Potato exploits](./windows/potatoes.md). Impersonate another token.
-* **SeLoadDriverPrivilege** - Load a kernel driver. Allows privesc to SYSTEM using a variety of exploits involving the loading of exploitable drivers. [More Info](./windows/seloaddrivers.md)
+* **SeLoadDriverPrivilege** - Load a kernel driver. Allows privesc to SYSTEM using a variety of exploits involving the loading of exploitable drivers. [More Info.](./windows/seloaddrivers.md)
 * **SeCreateTokenPrivilege** - Allows you to create arbitrary tokens. But you need another privilege that allows you to impersonate it (like SeImpersonatePrivilege).
 
 The following privs are also instant win tier, though you probably won't find these outside of admin/system sessions anyway. You are probably more interested in using these for further (post-)exploitation when you already have admin/system:
