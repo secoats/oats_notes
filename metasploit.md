@@ -267,6 +267,10 @@ You will probably only be able to TCP CONNECT scan through the socks proxy.
 
 You can create a FoxyProxy setting in order to visit websites in the subnet with Firefox. Make sure to set it to SOCKS4 instead of the default HTTP.
 
+* For more details on using your **Browser** with SOCKS see: [FoxyProxy in the SSH cheatsheet.](ssh.md#foxyproxy-and-socks)
+* For details on using **Burp** with SOCKS see: [Burp in the SSH cheatsheet.](ssh.md#burp-and-socks)
+* For more details on using **Proxychains** see: [Proxychains in the SSH cheatsheet.](ssh.md#proxychains)
+
 
 ### Single port forward
 
@@ -280,3 +284,4 @@ meterpreter> portfwd add -l 3389 -p 3389 -r [target host]
 
 ```
 
+This will open port 3389 on localhost. Through `localhost:3389` you can then interact with the target service.

@@ -12,6 +12,11 @@
 * [Pivoting](./ssh.md#pivoting)
     * [Single Port Forward](./ssh.md#pivoting-single-port-forward)
     * [Dynamic SOCKS Proxy](./ssh.md#pivoting-dynamic-socks-proxy)
+        * [FoxyProxy and SOCKS](./ssh.md#foxyproxy-and-socks)
+        * [Burp and SOCKS](./ssh.md#burp-and-socks)
+        * [Proxychains](./ssh.md#proxychains)
+    * [Useful SSH Params](./ssh.md#pivoting-useful-ssh-params)
+
 
 ## Basic Usage
 
@@ -95,6 +100,10 @@ Append your public key to ~/.ssh/authorized_keys
 ```bash
 echo "<your_pub_key>" >> /home/admin/.ssh/authorized_keys
 ```
+
+## File Transfers
+
+🠒 See [SSH/SCP in the File Transfers Cheatsheet](./file_transfers.md#sshscp)
 
 ## Bruteforce
 
@@ -249,6 +258,10 @@ When bound to 0.0.0.0, then anybody in the nework can visit `http://10.1.1.99:10
 
 ## Pivoting
 
+🠒 See also [Metasploit notes on pivoting](./metasploit.md#pivoting). Which allows you to pivot without SSH.
+
+---
+
 Use a bridge host to reach a remote network. 
 
 This can be rather confusing, so here is a practical example:
@@ -302,7 +315,11 @@ Now you can visit `http://localhost:8888` in your browser on Kali which will be 
 
 ### Pivoting: Dynamic SOCKS Proxy
 
-You can also set up a proxy with SSH in order to reach every host/port in the target network 10.8.8.0/24 via SOCKS proxy:
+🠒 See also [Metasploit notes on SOCKS](./metasploit.md#socks-proxy). Which allows you to set up a dynamic SOCKS proxy without SSH.
+
+---
+
+You can also set up a dynamic proxy with SSH in order to reach every host/port in the target network 10.8.8.0/24 via SOCKS proxy:
 
 ```bash
 ⎡    Kali   ⎤       ⎡   BRIDGE  ⎤       ⎡   network   ⎤
@@ -317,38 +334,59 @@ ssh -N -D <localport> -q -C -f <user@bridge>
 ssh -N -D 1337 -q -C -f pippin@10.1.1.33
 ```
 
-Now you can use **FoxyProxy** in your browser to create a SOCKS 5 profile pointing to `localhost:1337`. With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. `http://10.8.8.222` with your browser.
+Now the SOCKS proxy should be available on `localhost:1337` and give access to the entire 10.8.8.0/24 subnet.
 
-Similarly you can use any command line program that supports SOCKS proxies. 
+By default SSH will use the SOCKS 5 protocol for dynamic forwards, which supports both TCP and UDP tunneling, but you can also specify a version with `-X 4` which will use SOCKS 4 (only supports TCP).
+
+
+#### FoxyProxy and SOCKS
+
+After setting up a SOCKS proxy you can use **FoxyProxy** in your browser to create a SOCKS5 profile pointing to your SOCKS proxy at `localhost:1337`. 
+
+Make sure to set the Proxy Type to "SOCKS" and not the default "HTTP".
+
+With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. `http://10.8.8.222` in your browser.
+
+
+#### Burp and SOCKS
+
+You can also set up **Burp** to use this SOCKS proxy. In Burp go to tab `User Options` and scroll to the bottom for SOCKS proxy settings. Set hostname and port to match your SOCKS forward.
+
+Once Burp is configured like that, you can use the your regular Burp HTTP FoxyProxy profile in your browser. The connection will go through Burp first and then through the SOCKS proxy.
+
+A lot of other programs and command line program support SOCKS proxies as well. Check the man pages of tools you need. 
+
+
+#### Proxychains
 
 For programs that do not support SOCKS proxies, take a look at **proxychains** or **proxychains-ng**. The regular proxychains is available on Kali.
+
+After setting up the SOCKS proxy, edit `/etc/proxychains.conf`:
 ```bash
-# [ Editing /etc/proxychains.conf ]
 # add our SOCKS proxy to /etc/proxychains.conf
 socks5 127.0.0.1 1337
 
 # Quiet mode (Optional. Less console spam from proxychains)
 quiet_mode
 ```
+
+Now in a terminal you can run commands through proxychains like so:
 ```bash
 # Nmap scan through proxychains using our SOCKS proxy
 # Scanning will be slow, so do not use service detection in a full TCP portscan
 proxychains nmap -sT -Pn -p- -T4 -v 10.8.8.47
 
-# Required are the options:
+# Probably required are the options:
 # -sT  -- Use TCP connect scan (SYN-scan doesn't work through SOCKS)
 # -Pn  -- Disable Ping probe (ICMP doesn't go through SOCKS)
 ```
 
 Once you have confirmed which ports are open, use focused nmap service scans on the open ports directly.
 
-If you need to use a program that does not work with proxychains or if using proxies is not feasible, then just create a single port forward (see above) to access a single remote service. Especially when scanning a service that method is preferred.
+If you need to use a program that does not work with proxychains or if using proxies is not feasible, then just create a single port forward ([see above](#pivoting-single-port-forward)) to access a single remote service.
 
-Especially **directory or password bruteforcing should be done via single-port forward**, not via SOCKS proxy.
+Especially **long running scans** or **directory/password bruteforcing** should probably be done via single-port forward, not via dynamic SOCKS proxy. The major benefit of SOCKS is convenience, but not exactly speed.
 
-By default SSH will use the SOCKS 5 protocol for dynamic forwards, which supports TCP and UDP tunneling, but you can also specify a version with `-X 4` which will use SOCKS 4 (only supports TCP).
-
-If SSH is not available, then you can also use meterpreter for pivoting. See the [Metasploit notes](./metasploit.md#pivoting).
 
 ### Pivoting: Useful SSH Params
 
@@ -361,7 +399,6 @@ If SSH is not available, then you can also use meterpreter for pivoting. See the
 # -f  -- fork to background process (you will need to use: kill <pid>)
 # -X  -- set SOCKS version 4 / 5 (default is 5)
 ```
-
 
 ## References
 

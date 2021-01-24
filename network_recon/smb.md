@@ -42,6 +42,11 @@ Obviously lowering your supported min SMB protocol version to ancient sumeric is
 
 ## File Transfers
 
+🠒 See also [File Transfers - SMB Section](../file_transfers.md#smb)
+
+---
+
+
 Yes, you can also use it as intended.
 
 ```bash
