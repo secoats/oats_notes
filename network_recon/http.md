@@ -71,21 +71,6 @@ If you do not know some confirmed usernames, then this might take forever. If yo
 It also helps if you know the required username format. For instance if usernames are all email addresses, then you should obviously only test email addresses. Preferably email addresses at the same domain as the website.
 
 
-#### CeWL:
-
-**CeWL** allows you to generate custom wordlists from words found on a specific website. 
-
-If the regular password lists fail, then this can be a good thing to try. It is quite common for users to pick words from the page they are looking at. Also this will catch application related words that could be standard passwords.
-
-* CeWL Kali docu: https://tools.kali.org/password-attacks/cewl
-
-```bash
-cewl -d 2 -m 5 -w wordlist_output.txt https://example.com
-
-## depth = 2
-## minimum length = 5
-```
-
 #### With Hydra:
 
 ```bash
@@ -123,6 +108,21 @@ wfuzz -Z -c -w passwords.txt -d '{username:admin,password:FUZZ}' --hw 221 -H "Co
 You can see if it works as intended by setting the proxy to burp:
 ```bash
 -p localhost:8080
+```
+
+#### CeWL:
+
+**CeWL** allows you to generate custom wordlists from words found on a specific website. 
+
+If the regular password lists fail, then this can be a good thing to try. It is quite common for users to pick words from the page they are looking at. Also this will catch application related words that could be standard passwords.
+
+* CeWL Kali docu: https://tools.kali.org/password-attacks/cewl
+
+```bash
+cewl -d 2 -m 5 -w wordlist_output.txt https://example.com
+
+## depth = 2
+## minimum length = 5
 ```
 
 ## Common Vulns
