@@ -1,5 +1,8 @@
 # Linux Commands Cheatsheet
 
+This is a cheatsheet for common linux commands. 
+
+[Linux Local Enum is over here.](../linux_local_enumeration.md)
 
 ## Essential Navigation
 
@@ -101,6 +104,7 @@ getconf LONG_BIT
 
 # hostname
 hostname
+dnsdomainname
 
 # IP address(es) and interfaces
 ip addr
@@ -108,14 +112,22 @@ ifconfig
 
 # Networks
 cat /etc/networks
+cat /etc/sysconfig/network
 
 # Hosts file
 cat /etc/hosts
+cat /etc/resolv.conf
 
 # ARP table (neighboring hosts)
 cat /proc/net/arp
 arp -a
 
+# firewall (might need root)
+iptables -L
+
+# Printers
+lpstat -a
+cat /etc/printcap
 ```
 
 ## Jobs
@@ -134,8 +146,8 @@ CTRL+Z
 bg
 bg <id>
 
-# fg <id>
-Move backgrounded job back to foreground
+# Move backgrounded job back to foreground
+fg <id>
 ```
 
 ## Binary Analysis

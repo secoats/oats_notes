@@ -36,8 +36,10 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - Other Tools
 
 ## Web Exploitation
-- LFI / RFI
+
 - [SQL Injections](./web_exploitation/sql_injection.md)
+- [PHP](./web_exploitation/php.md)
+  - [LFI / RFI](./web_exploitation/php.md#file-inclusions)
 - SQLMap
 - CSRF
 - XSS

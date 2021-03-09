@@ -45,6 +45,7 @@ ssh bandit.labs.overthewire.org -p 2220 -l bandit18 -t "cat ~/readme"
 Create RSA key pair:
 ```bash
 ssh-keygen -t rsa -b 4096
+ssh-keygen -t rsa -b 4096 -f ./id_rsa
 ```
 
 Start local SSH server:

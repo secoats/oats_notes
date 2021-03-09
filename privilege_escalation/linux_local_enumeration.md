@@ -111,6 +111,10 @@ arp -a
 
 # firewall (might need root)
 iptables -L
+
+# Printers
+lpstat -a
+cat /etc/printcap
 ```
 
 ## Easy Win: User Management File Permissions

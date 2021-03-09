@@ -133,6 +133,22 @@ arp -a
 type C:\WINDOWS\System32\drivers\etc\hosts
 ```
 
+Firewall:
+```powershell
+# show firewall config
+netsh firewall show state
+netsh firewall show config
+netsh advfirewall firewall dump
+```
+
+Printers:
+
+```powershell
+wmic printer list brief
+
+ps> Get-Printer | Format-List
+```
+
 ## Stored Credentials
 
 Make sure to re-check these whenever you gain access to a new user/session.

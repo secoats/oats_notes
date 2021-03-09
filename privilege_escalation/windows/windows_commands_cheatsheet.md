@@ -1,5 +1,9 @@
 # Windows Commands Cheatsheet
 
+This is a cheatsheet for common Windows commands. 
+
+[Windows Local Enum is over here.](../windows_local_enumeration.md)
+
 These are all for cmd.exe unless stated otherwise. There should be a separate powershell cheatsheet somewhere.
 
 ## Essential Navigation
@@ -130,6 +134,12 @@ route print
 arp -a
 ```
 
+Show network shares:
+```powershell
+net share
+```
+
+Application ports:
 ```powershell
 # print open ports
 netstat -ano
@@ -144,14 +154,27 @@ tasklist /fi "pid eq 2216"
 netstat -ab | more
 ```
 
+Firewall:
 ```powershell
 # show firewall config
+netsh firewall show state
 netsh firewall show config
 
-# disable firewall completely (I hope you know what you are doing)
+# show firewall config (alt)
+netsh advfirewall firewall dump
+
+# disable firewall completely (I hope you know what you are doing!)
 netsh firewall set opmode disable
 NetSh Advfirewall set allprofiles state off
 ```
+
+Printers:
+```powershell
+wmic printer list brief
+
+ps> Get-Printer | Format-List
+```
+
 
 ### User Management
 
