@@ -1,5 +1,21 @@
 # Linux Local Enumeration
 
+* [Whoami?](#whoami)
+* [Useful Tools Installed?](#useful-tools-installed)
+* [Other Users](#other-users)
+* [System](#system)
+* [Network](#network)
+* [Drives and Mounts](#drives-and-mounts)
+* [User Management File Permissions](#easy-win-user-management-file-permissions)
+* [Sudo](#sudo)
+* [Enum Scripts](#enum-scripts)
+* [Environment Variables](#environment-variables)
+* [Interesting Files](#interesting-files)
+* [Cron and Friends](#cron-and-friends)
+* [SUID and GUID](#suid-and-guid)
+* [Service Exploits](#service-exploits)
+* [NFS](#nfs)
+
 ## Whoami?
 
 Who are you and what can you do?
@@ -117,6 +133,24 @@ lpstat -a
 cat /etc/printcap
 ```
 
+## Drives and Mounts
+
+Drives:
+```bash
+df -h
+lsblk
+fdisk -l
+```
+
+Mounts:
+```bash
+findmnt
+mount
+df -aTh
+cat /proc/mounts
+cat /proc/self/mounts
+```
+
 ## Easy Win: User Management File Permissions
 
 Some files are often left with insecure permissions because of user error (e.g. a user changed permissions on a file in order to edit it and then did not change them back). In CTFs this is considered the lowest of the low hanging fruit, so you might encounter this on a beginner machine.
@@ -126,6 +160,8 @@ I just list this so early because it can be checked very quickly and if you miss
 Check the file permissions on the following files:
 
 ```bash
+ls -al /etc/passwd /etc/shadow /etc/group /etc/gshadow /etc/sudoers
+
 ls -al /etc/passwd
 ls -al /etc/shadow
 ls -al /etc/sudoers
@@ -137,7 +173,7 @@ You have won, if...
 
 * ...you can **write to any** of these files. You can just give yourself the root user id or group id. Or give yourself full sudo permissions. Hashes in passwd take precedent over shadow by the way.
 * ...you can **read shadow** and there are **crackable hashes**
-* ...you can **read gshadow** and there are **crackable hashes** (less likely, but check anyway)
+* ...you can **read gshadow** and there are **crackable hashes** (unlikely, but check anyway)
 
 Being able to **read the sudoers** file can also be useful, allowing you to enumerate the sudo permissions of all the users on the system.
 
@@ -313,6 +349,23 @@ Especially interesting here are:
 * readable mail
 * check spool
 
+### /opt/
+
+* commercial (non-free) monolithic software
+* software not deployed via common package mangers
+
+### /mnt/
+
+* Temporarily mounted filesystems
+
+### /usr/local
+
+* Non-system-default locally installed software
+
+### /srv/
+
+* Served files. But this is rarely used. Usually served files are stored somewhere in /var/ instead. Doesn't hurt to check though.
+
 ### Search commands
 
 You can easily get into the weeds with this, so try to limit your searches first and then broaden your scope. 
@@ -344,6 +397,40 @@ find / -user root -mtime -1 -not -type d -xdev -exec ls --color -al {} \; 2>/dev
 # modified time:             -mtime 
 # access time:               -atime
 # change (meta data) time:   -ctime
+```
+
+Just replace "." with "/" to search the entire system instead of starting with the current directory.
+
+Find **files containing** "passw" and print the 10 chars before and 40 chars after the match (might be spammy):
+```bash
+# "passw"
+find . -readable -type f -exec grep -oiE ".{0,10}passw.{0,40}" {} \; 2>/dev/null
+
+# "password:"
+find . -readable -type f -exec grep -oiE ".{0,10}password:.{0,40}" {} \; 2>/dev/null
+find . -readable -type f -exec grep -oiE ".{0,10}password :.{0,40}" {} \; 2>/dev/null
+
+# "password="
+find . -readable -type f -exec grep -oiE ".{0,10}password=.{0,40}" {} \; 2>/dev/null
+find . -readable -type f -exec grep -oiE ".{0,10}password =.{0,40}" {} \; 2>/dev/null
+```
+
+Find files that have "passw" or "secret" in their **filenames**:
+```bash
+# find files by filenames
+find / -not -type d \( -iname "*passw*" -o -iname "*secret*" \) -exec ls --color -al {} \; 2>/dev/null
+
+# find dirs by directory names
+find / -type d \( -iname "*passw*" -o -iname "*secret*" \) -exec ls --color -d {} \; 2>/dev/null
+```
+
+Find writable files in /etc/
+```bash
+# writable files in /etc
+find /etc -writable -not -type d -exec ls -al {} \; 2>/dev/null
+
+# writable directories in /etc
+find /etc -writable -type d -exec ls -d {} \; 2>/dev/null
 ```
 
 ## Cron and Friends
@@ -441,7 +528,7 @@ dpkg -l #Debian
 rpm -qa #Centos
 ```
 
-### Relative Path Exploit
+### Relative Path Exploits
 
 Check the path used by systemctl
 ```bash

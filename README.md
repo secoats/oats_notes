@@ -12,7 +12,7 @@
          Enjoy your Oats!            
 ```
 
-These are some of the InfoSec / Pen-testing notes I made during CTFs, HackTheBox and the usual certificates.
+These are some of the InfoSec / Pentesting notes I made during CTFs, HackTheBox and the usual certificates.
 
 I am slowly collecting and cleaning these up for my own use. Maybe they are useful to you as well.
 
