@@ -73,20 +73,31 @@ It also helps if you know the required username format. For instance if username
 
 #### With Hydra:
 
+Make sure to keep the username lists small or test a single username like "admin".
+
 ```bash
+# example wordlists ( [seclists](https://github.com/danielmiessler/SecLists) )
+export userlist=/usr/share/seclists/Usernames/top-usernames-shortlist.txt
+export passlist=/usr/share/seclists/Passwords/darkweb2017-top10000.txt
+
 # HTTP Post Form
-hydra -L usernames.txt -P passwords.txt 192.168.2.62 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
+hydra -L $userlist -P $passlist 10.10.13.37 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
+hydra --l admin -P $passlist 10.10.13.37 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
 
 # HTTP Basic Auth
-hydra -L usernames.txt -P passwords.txt sizzle.htb.local http-get /certsrv/
+hydra -L $userlist -P $passlist 10.10.13.37 http-get /somesecurepath/
+hydra -l admin -P $passlist -s 9007 -f 10.10.10.218 http-get /somesecurepath/
 ```
 
 #### With WFuzz:
 
 See the dedicated WFuzz cheatsheet for more details.
 
-Make sure to set threads to 1 like in the command here or you won't see which password actually worked.
+Make sure to set threads to `-t 1` like in the command here or you might not see which password actually worked.
+
 ```bash
+# Useful params:
+
 -t 1 # number of threads
 -d 'username=admin&password=FUZZ' # post data
 -H # header
@@ -129,23 +140,33 @@ cewl -d 2 -m 5 -w wordlist_output.txt https://example.com
 
 ### LFI / RFI
 
-See the dedicated LFI / RFI cheatsheet.
+[See LFI / RFI notes in the PHP section.](../web_exploitation/php.md) (this is obviously not limited to just PHP though)
 
 ### Wordpress, Drupal, etc.
 
-See the dedicated Wordpress cheatsheet.
+For [**wpscan**](https://github.com/wpscanteam/wpscan/wiki/WPScan-User-Documentation) you will need to get an API key to use it properly. You can get one for free [from their website](https://wpscan.com/api) after creating an account. The free ones are limited to 25 API requests per day, which is enough for most use cases. One scan = one API request.
 
-For **wpscan** you will have to get an API key to use it properly from their website.
+If you encounter a wordpress installation in a CTF, then you should definitely run this.
 
 ```bash
-# scan for usernames
+# enumeration scan
+wpscan --disable-tls-checks --api-token <your_api_key_here> --url https://target.htb/wordpress/ --enumerate
+
+# Ignore sanity checks (i.e. if there is not wordpress frontpage)
+wpscan --disable-tls-checks --api-token <your_api_key_here> --url http://target.htb/testing/ --enumerate --force
+
+# scan for usernames specifically
 wpscan --disable-tls-checks --api-token <your_api_key_here> --url https://target.htb/wordpress/ --enumerate u
 
-# scan plugins
+# scan plugins specifically
 wpscan --disable-tls-checks --api-token <your_api_key_here> --url https://target.htb/wordpress/ --enumerate p
 ```
 
 All of these CMS' tend to have a ton of vulns, especially in plugins. There are scanners for all of the big ones.
+
+* Drupal - [droppescan](https://github.com/droope/droopescan)
+* Joomla - [JoomScan](https://github.com/OWASP/joomscan)
+* Typo3 - [Typo3Scan](https://github.com/whoot/Typo3Scan)
 
 ### IIS
 

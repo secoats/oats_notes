@@ -130,6 +130,24 @@ lpstat -a
 cat /etc/printcap
 ```
 
+Open ports
+
+```
+# show open ports and associated application
+netstat -tulpn
+ss -lntu
+lsof -i
+
+# local nmap
+sudo nmap -n -PN -sT -sU -p- localhost
+nmap -n -PN -sT -sU -p- localhost
+
+
+# BSD
+sockstat -4 -l
+sockstat -6 -l
+```
+
 ## Jobs
 
 ```bash

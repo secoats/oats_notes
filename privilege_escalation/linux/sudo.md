@@ -217,3 +217,13 @@ pkexec "/bin/sh" #You will be prompted for your user password
 
 # root shell pops here
 ```
+
+## doas
+
+If you can't run su or sudo and you cannot elevate despite having the root password, then sometimes you can find this (especially on BSD):
+
+```bash
+doas -u root /bin/sh 
+# type root password here
+```
+

@@ -6,7 +6,7 @@
 * [System](#system)
 * [Network](#network)
 * [Drives and Mounts](#drives-and-mounts)
-* [User Management File Permissions](#easy-win-user-management-file-permissions)
+* [User Management File Permissions](#user-management-file-permissions)
 * [Sudo](#sudo)
 * [Enum Scripts](#enum-scripts)
 * [Environment Variables](#environment-variables)
@@ -133,6 +133,24 @@ lpstat -a
 cat /etc/printcap
 ```
 
+## Open Ports
+
+```bash
+# show open ports and associated application
+netstat -tulpn
+ss -lntu
+lsof -i
+
+# local nmap
+sudo nmap -n -PN -sT -sU -p- localhost
+nmap -n -PN -sT -sU -p- localhost
+
+
+# BSD
+sockstat -4 -l
+sockstat -6 -l
+```
+
 ## Drives and Mounts
 
 Drives:
@@ -151,7 +169,7 @@ cat /proc/mounts
 cat /proc/self/mounts
 ```
 
-## Easy Win: User Management File Permissions
+## User Management File Permissions
 
 Some files are often left with insecure permissions because of user error (e.g. a user changed permissions on a file in order to edit it and then did not change them back). In CTFs this is considered the lowest of the low hanging fruit, so you might encounter this on a beginner machine.
 
@@ -238,6 +256,20 @@ sudo -u someuser whoami
 
 If you see `env_keep+=LD_PRELOAD` or `env_keep+=LD_LIBRARY_PATH` in the `sudo -l` output then you might also be able to privesc to root rather easily. See the [dedicated sudo notes](./linux/sudo.md) for more info on this.
 
+Some groups might allow you to use `pkexec` with similar effect to sudo:
+
+```bash
+pkexec "/bin/sh"
+# <type your user password>
+# <root shell pops here>
+```
+
+On BSD, if you cannot access `su` or `sudo`, then you might be able to use `doas`:
+```bash
+doas -u root /bin/sh 
+# <type root password>
+# <root shell pops here>
+```
 
 ### Limited Sudo
 
