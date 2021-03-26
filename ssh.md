@@ -158,6 +158,10 @@ ssh -L <local-host>:<local-port>:<target-host>:<target-port> <user@target>
 ssh -L <local-port>:<target-host>:<target-port> <user@target>
 ```
 
+* **Open a listening port on your own local machine** (where you are running the ssh command)
+* Traffic to that local port gets relayed to a remote host:port socket via SSH tunnel
+* The (local) SSH **Client** is in charge of opening the local port
+
 Example (Kali is your local machine):
 
 ```bash
@@ -269,6 +273,10 @@ The process can also be done in reverse, opening a port on the TARGET which forw
 ssh -R <target-port>:<forward-to-host>:<forward-to-port> user@target
 ```
 
+* **Open a listening port on a remote machine**
+* Traffic to that remote host:port socket gets **relayed to some port on your own (local) machine**
+* The **SSH Server** is in charge of opening the remote port
+
 Example (you are Kali). Initially the setup looks like this:
 
 ```bash
@@ -308,7 +316,7 @@ The result would look like this:
 
 Wherein `10.1.1.99:10080` forwards to `10.1.1.42:80`.
 
-Now users on the TARGET can visit `http://localhost:10080` and they will see the files served by the web server running on `http://10.1.1.42:80` (Kali).
+Now users on the TARGET can visit `http://127.0.0.1:10080` and they will see the files served by the web server running on `http://10.1.1.42:80` (Kali).
 
 Please note that the remote forward permissions are determined by the SSH config of the TARGET SSH server. 
 In the `/etc/ssh/sshd_config` of the TARGET you need to set `GatewayPorts yes` in order to bind a port globally (wildcard 0.0.0.0). Changing that config usually requires root access on TARGET.
@@ -373,7 +381,7 @@ ssh -N -L 8888:10.8.8.77:80 pippin@10.1.1.33
 
 Just to be clear, you execute that ssh command on Kali. This will open port 8888 on Kali.
 
-Now you can visit `http://localhost:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77:80 by the SSH server on BRIDGE.
+Now you can visit `http://127.0.0.1:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77:80 by the SSH server on BRIDGE.
 
 
 ### Pivoting: Dynamic SOCKS Proxy
