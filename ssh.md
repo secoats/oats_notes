@@ -196,7 +196,7 @@ Either way the result will be like this:
 ⎡  Kali (you) ⎤               ⎡     TARGET     ⎤
 ⎜  10.1.1.42  ⎟ ==== LAN ==== ⎜    10.1.1.99   ⎟
 ⎜             ⎟               ⎜ Open: 22 (SSH) ⎟
-⎣ Open:  1337 ⎦  <- tunnel -> ⎣ Filtered: 3306 ⎦  
+⎣ Open: 1337  ⎦  <- tunnel -> ⎣ Filtered: 3306 ⎦  
 ```
 
 Effectively it will look to you as if the MySQL database was running on your own machine on port 1337.
@@ -318,7 +318,7 @@ In this scenario you cannot reach the **TARGET** host because the router firewal
 
 ⎡   Kali    ⎤                          ⎡   TARGET  ⎤
 ⎜ 10.1.1.42 ⎟ ========== X|X --------- ⎜ 10.8.8.77 ⎟
-⎣           ⎦                          ⎣           ⎦
+⎣           ⎦                          ⎣ Port:  80 ⎦
 ```
 
 Now assume you compromised a host that is able to reach the target:
@@ -330,9 +330,11 @@ You have ssh access on the **BRIDGE** host with username pippin, i.e. you could 
 Now you can use **BRIDGE** to access **TARGET** via port forwarding:
 
 ```bash
+# SSH server on Bridge acts as a middleman between Kali and TARGET
+
 ⎡    Kali   ⎤       ⎡   BRIDGE  ⎤       ⎡   TARGET  ⎤
 ⎜ 10.1.1.42 ⎟ ===== ⎜ 10.1.1.33 ⎟ ===== ⎜ 10.8.8.77 ⎟
-⎣           ⎦       ⎣ Port:  22 ⎦       ⎣           ⎦
+⎣           ⎦       ⎣ Port:  22 ⎦       ⎣ Port:  80 ⎦
 ```
 
 You can either set up a forward to a single port on 10.8.8.77 or you can set up a dynamic Proxy in order to access all of 10.8.8.0/24.
@@ -346,15 +348,15 @@ You can either set up a forward to a single port on 10.8.8.77 or you can set up 
 ```
 ```bash
 # Syntax
-ssh -L <localport>:<target>:<targethost> <user@bridge>
+ssh -N -L <localport>:<target>:<targethost> <user@bridge>
 
 # Example
-ssh -L 8888:10.8.8.77:80 pippin@10.1.1.33
+ssh -N -L 8888:10.8.8.77:80 pippin@10.1.1.33
 ```
 
 Just to be clear, you execute that ssh command on Kali. This will open port 8888 on Kali.
 
-Now you can visit `http://localhost:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77:80
+Now you can visit `http://localhost:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77:80 by the SSH server on BRIDGE.
 
 
 ### Pivoting: Dynamic SOCKS Proxy
@@ -368,7 +370,7 @@ You can also set up a dynamic proxy with SSH in order to reach every host/port i
 ```bash
 ⎡    Kali   ⎤       ⎡   BRIDGE  ⎤       ⎡   network   ⎤
 ⎜ 10.1.1.42 ⎟ ===== ⎜ 10.1.1.33 ⎟ ====< ⎜ 10.8.8.0/24 ⎟
-⎣ Port:1337 ⎦       ⎣ Port:  22 ⎦       ⎣             ⎦
+⎣ Port:1337 ⎦       ⎣ Port:  22 ⎦       ⎣   dynamic   ⎦
 ```
 ```bash
 # Syntax
