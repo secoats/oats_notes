@@ -152,10 +152,13 @@ scp SourceFile user@host:directory/TargetFile
 ```bash
 # Local port forward
 # Syntax
-ssh -L <local-ip>:<local-port>:<target-host>:<target-port> <user@target>
+ssh -L <local-host>:<local-port>:<target-host>:<target-port> <user@target>
+
+# Syntax (short-hand, omit local host)
+ssh -L <local-port>:<target-host>:<target-port> <user@target>
 ```
 
-Example (you are Kali):
+Example (Kali is your local machine):
 
 ```bash
 # Scenario: No access from Kali to 10.1.1.99:3306
@@ -168,7 +171,7 @@ Example (you are Kali):
 
 In this scenario you have SSH access to the TARGET host with the IP address `10.1.1.99`. 
 
-The TARGET machine has a firewall that blocks remote access to the 3306 port (the MySQL database running on TARGET). But you very much want to get access to it.
+The TARGET machine has a firewall that blocks remote access to the 3306 port (the MySQL database running on TARGET). But you very much want to get access to it, so you can enumerate it properly.
 
 Therefore you want to forward that filtered MySQL port 3306 on TARGET to your own machine so you can interact with it more easily:
 
@@ -184,11 +187,11 @@ ssh -L 127.0.0.1:1337:127.0.0.1:3306 user@10.1.1.99
 ssh -L 127.0.0.1:1337:10.1.1.99:3306 user@10.1.1.99
 ```
 
-This will open the port 1337 on Kali's localhost (127.0.0.1). When you interact with socket `127.0.0.1:1337` on Kali, then the connection will be automatically forwarded to `10.1.1.99:3306` or `127.0.0.1:3306` on the target (as seen by from the perspective of the SSH server on TARGET.
+This will open the port 1337 on Kali's localhost (127.0.0.1:1337). When you interact with socket `127.0.0.1:1337` on Kali, then the connection will be automatically relayed to `10.1.1.99:3306` or `127.0.0.1:3306` on the target (as seen from the perspective of the SSH server on TARGET.
 
-Example 1 and 2 are almost identical in behavior since from the viewpoint of the SSH server `127.0.0.1` and `10.1.1.99` are both its own IP addresses. But sometimes servers have access control restrictions and will block any traffic that is not from and to localhost (`127.0.0.1 <-> 127.0.0.1`). So most of the time Example 1 should be the preferred version when the target socket is on the same machine as the SSH server.
+Example 1 and 2 are almost identical in behavior since from the viewpoint of the SSH server `127.0.0.1` (localhost) and `10.1.1.99` (network address) are both its own IP addresses. But sometimes applications have access control restrictions and will block any traffic that is not originating from localhost and/or directed to localhost (`127.0.0.1 <-> 127.0.0.1`). So most of the time Example 1 would be the preferred version when the target socket is on the same machine as the SSH server.
 
-Either way the result will be like this:
+Either way the result will look like this:
 
 ```bash
 # Scenario: Access to 10.1.1.99:3306 through 1337 on Kali
@@ -201,11 +204,15 @@ Either way the result will be like this:
 
 Effectively it will look to you as if the MySQL database was running on your own machine on port 1337.
 
-Now you can interact with the MySQL server via `mysql --port 1337` in a local terminal on Kali.
+Now you can interact with the MySQL server in a terminal on Kali:
+
+```bash
+mysql -u root -p -h 127.0.0.1 -P 1337
+```
 
 ### Access control on forwarded port
 
-Since the local host `127.0.0.1` is most often implied, there is a short-hand syntax:
+Since you almost always just want to use `127.0.0.1` (localhost) as the `<local-host>` parameter, there is a shorthand syntax:
 
 ```bash
 # short-hand version for local forward limited to localhost (omit local host IP)
@@ -215,13 +222,16 @@ ssh -L <local-port>:<target-host>:<target-port> <user@target>
 # Example
 ssh -L 1337:127.0.0.1:3306 user@10.1.1.99
 ```
+This just omits the `<local-host>` parameter and implies that you want to use `127.0.0.1`.
 
-If you write 127.0.0.1 as local IP address, then you will only be able to access the locally opened socket from localhost. The same is true for the shorthand version above. 
+If you write `127.0.0.1` as `<local-host>`, then you will only be able to access the locally opened socket from `127.0.0.1`. The same is true for the shorthand version above. 
 
-If you wish to open the local port 1337 globally (to the entire network), then use the wildcard 0.0.0.0:
+But there is a reason why you can supply the `<local-host>` parameter in the first place. You can also bind the socket you open to other listening addresses than localhost.
+
+If you wish to open the local port 1337 globally (to the entire network, available on all interfaces), then use the wildcard `0.0.0.0`:
 
 ```bash
-# Local port forward. Allow access to all IP addresses (wildcard)
+# Local port forward. Listen for all local IP addresses (wildcard)
 # Syntax
 ssh -L 0.0.0.0:<local-port>:<target-host>:<target-port> <user@target>
 
@@ -241,6 +251,13 @@ ssh -L :1337:127.0.0.1:3306 user@10.1.1.99
 ```
 
 Notice the colon (`:`) left of the local port.
+
+But you can also listen on a specific IP address. Let's say you have a network interface with the IP Address `10.1.1.42`. Then you could do:
+
+```bash
+# only listen for connections to specific ip address
+ssh -L 10.1.1.42:1337:127.0.0.1:3306 user@10.1.1.99
+```
 
 ### Remote Forward
 
