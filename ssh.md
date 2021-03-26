@@ -149,41 +149,55 @@ scp SourceFile user@host:directory/TargetFile
 
 ## Port Forwarding
 ### Local Forward
+```bash
+# Local port forward
+# Syntax
+ssh -L <local-ip>:<local-port>:<target-host>:<target-port> <user@target>
+```
 
 Example (you are Kali):
 
 ```bash
-⎡   Kali    ⎤         ⎡     TARGET     ⎤
-⎜ 10.1.1.42 ⎟ ======= ⎜    10.1.1.99   ⎟
-⎜           ⎟         ⎜ Open:       22 ⎟
-⎜           ⎟         ⎜ Filtered: 3306 ⎟
-⎣           ⎦         ⎣ Filtered: 8080 ⎦
+# Scenario: No access from Kali to 10.1.1.99:3306
+
+⎡  Kali (you) ⎤             ⎡     TARGET     ⎤
+⎜  10.1.1.42  ⎟ === LAN === ⎜    10.1.1.99   ⎟
+⎜             ⎟             ⎜ Open: 22 (SSH) ⎟
+⎣             ⎦             ⎣ Filtered: 3306 ⎦  
 ```
 
-You have SSH access to the TARGET host. 
+In this scenario you have SSH access to the TARGET host with the IP address `10.1.1.99`. 
 
-The target machine has a firewall that blocks remote access to the 3306 port (the MySQL database running on TARGET).
+The TARGET machine has a firewall that blocks remote access to the 3306 port (the MySQL database running on TARGET). But you very much want to get access to it.
 
-You want to forward that filtered MySQL port on TARGET to your own machine so you can interact with it more easily.
+Therefore you want to forward that filtered MySQL port 3306 on TARGET to your own machine so you can interact with it more easily:
 
 ```bash
-# Local port forward. Access is limited to localhost
-# Syntax
-ssh -L <local-ip>:<local-port>:<target-host>:<target-port> <user@target>
+# Example 1
+# open port 1337 on your own machine (localhost on Kali)
+# traffic gets relayed to 127.0.0.1:3306 (localhost on TARGET) by the SSH server
+ssh -L 127.0.0.1:1337:127.0.0.1:3306 user@10.1.1.99
 
-# Example
+# Example 2
+# open port 1337 on your own machine (localhost on Kali)
+# traffic gets relayed to 10.1.1.99:3306 (TARGET) by the SSH server
 ssh -L 127.0.0.1:1337:10.1.1.99:3306 user@10.1.1.99
 ```
+
+This will open the port 1337 on Kali's localhost (127.0.0.1). When you interact with socket `127.0.0.1:1337` on Kali, then the connection will be automatically forwarded to `10.1.1.99:3306` or `127.0.0.1:3306` on the target (as seen by from the perspective of the SSH server on TARGET.
+
+Example 1 and 2 are almost identical in behavior since from the viewpoint of the SSH server `127.0.0.1` and `10.1.1.99` are both its own IP addresses. But sometimes servers have access control restrictions and will block any traffic that is not from and to localhost (`127.0.0.1 <-> 127.0.0.1`). So most of the time Example 1 should be the preferred version when the target socket is on the same machine as the SSH server.
+
+Either way the result will be like this:
+
 ```bash
-# short-hand version
-# Syntax
-ssh -L <local-port>:<target-host>:<target-port> <user@target>
+# Scenario: Access to 10.1.1.99:3306 through 1337 on Kali
 
-# Example
-ssh -L 1337:10.1.1.99:3306 user@10.1.1.99
+⎡  Kali (you) ⎤               ⎡     TARGET     ⎤
+⎜  10.1.1.42  ⎟ ==== LAN ==== ⎜    10.1.1.99   ⎟
+⎜             ⎟               ⎜ Open: 22 (SSH) ⎟
+⎣ Open:  1337 ⎦  <- tunnel -> ⎣ Filtered: 3306 ⎦  
 ```
-
-This will open the port 1337 on Kali's localhost (127.0.0.1). When you interact with socket `localhost:1337`, then the connection will be automatically forwarded to `10.1.1.99:3306`.
 
 Effectively it will look to you as if the MySQL database was running on your own machine on port 1337.
 
@@ -191,7 +205,20 @@ Now you can interact with the MySQL server via `mysql --port 1337` in a local te
 
 ### Access control on forwarded port
 
-If you write 127.0.0.1 as local IP address then you will only be able to access it from localhost. If you wish to open the local port 1337 globally (to the entire network), then use the wildcard 0.0.0.0:
+Since the local host `127.0.0.1` is most often implied, there is a short-hand syntax:
+
+```bash
+# short-hand version for local forward limited to localhost (omit local host IP)
+# Syntax
+ssh -L <local-port>:<target-host>:<target-port> <user@target>
+
+# Example
+ssh -L 1337:127.0.0.1:3306 user@10.1.1.99
+```
+
+If you write 127.0.0.1 as local IP address, then you will only be able to access the locally opened socket from localhost. The same is true for the shorthand version above. 
+
+If you wish to open the local port 1337 globally (to the entire network), then use the wildcard 0.0.0.0:
 
 ```bash
 # Local port forward. Allow access to all IP addresses (wildcard)
@@ -199,30 +226,42 @@ If you write 127.0.0.1 as local IP address then you will only be able to access 
 ssh -L 0.0.0.0:<local-port>:<target-host>:<target-port> <user@target>
 
 # Example
-ssh -L 0.0.0.0:1337:10.1.1.99:3306 user@10.1.1.99
+ssh -L 0.0.0.0:1337:127.0.0.1:3306 user@10.1.1.99
 ```
+
+This also has a shorthand version:
+
 ```bash
-# Short-hand version. Local port forward
+# short-hand version for local forward open to the local network (omit local host IP, but not the colon)
 # Syntax
 ssh -L :<local-port>:<target-host>:<target-port> <user@target>
 
 # Example
-ssh -L :1337:10.1.1.99:3306 user@10.1.1.99
+ssh -L :1337:127.0.0.1:3306 user@10.1.1.99
 ```
+
+Notice the colon (`:`) left of the local port.
 
 ### Remote Forward
 
 The process can also be done in reverse, opening a port on the TARGET which forwards to one of your local ports.
 
-Initially the setup looks like this:
-
 ```bash
-⎡    Kali   ⎤         ⎡   TARGET  ⎤
-⎜ 10.1.1.42 ⎟ ======= ⎜ 10.1.1.99 ⎟
-⎣ Open:  80 ⎦         ⎣ Open:  22 ⎦                            
+# Remote forward. Open port on TARGET loopback interface.
+# Syntax
+ssh -R <target-port>:<forward-to-host>:<forward-to-port> user@target
 ```
 
-There is an HTTP server running on your own machine (Kali) on port 80. You wish to open a port on TARGET which forwards to your HTTP server.
+Example (you are Kali). Initially the setup looks like this:
+
+```bash
+⎡  Kali (you) ⎤                ⎡     TARGET     ⎤
+⎜  10.1.1.42  ⎟  ==== LAN ==== ⎜    10.1.1.99   ⎟
+⎜             ⎟                ⎜ Open: 22 (SSH) ⎟
+⎣ Open:   80  ⎦                ⎣                ⎦                            
+```
+
+In this scenario there is an HTTP server running on your own machine (Kali) on port 80. You wish to open a port on TARGET which forwards to your HTTP server.
 
 On Kali you would run:
 ```bash
@@ -231,31 +270,33 @@ On Kali you would run:
 ssh -R <target-port>:<forward-to-host>:<forward-to-port> user@target
 
 # Example
+ssh -R 127.0.0.1:10080:127.0.0.1:80 user@target
+
+# Example (shorthand syntax)
 ssh -R 10080:127.0.0.1:80 user@target
 ```
 ```bash
-# Optionally make port on target globally accessible (GatewayPorts yes)
+# Optionally make the port on target globally accessible (GatewayPorts yes)
 ssh -R 0.0.0.0:10080:127.0.0.1:80 user@target
 ```
 
 The result would look like this:
 
 ```bash
-⎡    Kali   ⎤         ⎡    TARGET   ⎤
-⎜ 10.1.1.42 ⎟ ======= ⎜  10.1.1.99  ⎟
-⎜ Open:  80 ⎟         ⎜ Open:    22 ⎟
-⎣           ⎦         ⎣ Open: 10080 ⎦                        
+⎡ Kali (you) ⎤               ⎡      TARGET    ⎤
+⎜  10.1.1.42 ⎟ ==== LAN ==== ⎜    10.1.1.99   ⎟
+⎜            ⎟               ⎜ Open: 22 (SSH) ⎟
+⎣ Open:   80 ⎦  <- tunnel -> ⎣ Open:    10080 ⎦                        
 ```
 
 Wherein `10.1.1.99:10080` forwards to `10.1.1.42:80`.
 
-Now users on the TARGET can visit `http://localhost:10080` and they will see the web server running on `http://10.1.1.42:80`.
+Now users on the TARGET can visit `http://localhost:10080` and they will see the files served by the web server running on `http://10.1.1.42:80` (Kali).
 
 Please note that the remote forward permissions are determined by the SSH config of the TARGET SSH server. 
 In the `/etc/ssh/sshd_config` of the TARGET you need to set `GatewayPorts yes` in order to bind a port globally (wildcard 0.0.0.0). Changing that config usually requires root access on TARGET.
 
 When bound to 0.0.0.0, then anybody in the nework can visit `http://10.1.1.99:10080` in order to access the web server running on `http://10.1.1.42:80`.
-
 
 ## Pivoting
 
@@ -273,6 +314,8 @@ This can be rather confusing, so here is a practical example:
 In this scenario you cannot reach the **TARGET** host because the router firewall will block it or there is no route to the 10.8.8.0/24 network.
 
 ```bash
+# Communication impossible between Kali and TARGET (no route)
+
 ⎡   Kali    ⎤                          ⎡   TARGET  ⎤
 ⎜ 10.1.1.42 ⎟ ========== X|X --------- ⎜ 10.8.8.77 ⎟
 ⎣           ⎦                          ⎣           ⎦
