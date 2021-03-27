@@ -11,12 +11,13 @@ Ever had to work with a remote host that seemed to resist any attempt to transfe
 3. [SMB](#smb)
 4. [Netcat](#netcat)
 5. [BASH](#bash)
-6. [SSH/SCP](#sshscp)
-7. [Python](#python)
-8. [PHP](#php)
-9. [NFS](#nfs)
-10. [RDP](#rdp)
-11. [Copy&Paste](#copy-paste)
+6. [Socat](#socat)
+7. [SSH/SCP](#sshscp)
+8. [Python](#python)
+9. [PHP](#php)
+10. [NFS](#nfs)
+11. [RDP](#rdp)
+12. [Copy&Paste](#copy-paste)
 
 ## FTP
 
