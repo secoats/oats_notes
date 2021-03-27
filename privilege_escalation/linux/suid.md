@@ -263,7 +263,7 @@ Here is a list of standard (boring) SUID files that are commonly found on Linux 
 
 The point of this list is that you can check whether a found SUID file is custom / non-standard and therefore interesting.
 
-This does not mean a standard SUID file cannot be vulnerable, you might want to check the versions of the standard SUID files if everything else fails. Linpeas tends to check that for you though.
+This does not mean a standard SUID file cannot be vulnerable, you might want to check the versions of the standard SUID files if everything else fails. Linpeas tends to check that for you.
 
 ```bash
 /bin/fusermount

