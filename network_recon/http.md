@@ -274,4 +274,4 @@ If there is no output printed, try to ping your own machine:
 
 Make sure to add the `-c <num>` flag to the ping command or you will get spammed by ICMP endlessly.
 
-Confirm the pings with Wireshark.
+Confirm the pings with tcpdump (command line) or Wireshark (GUI).

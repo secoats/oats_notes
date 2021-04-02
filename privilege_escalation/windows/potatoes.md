@@ -13,7 +13,7 @@
 
 The potato exploits are a series of **privilege escalation** exploits. A wide variety of Windows versions are vulnerable.
 
-**JuicyPotato** tends to work most often, so if the conditions fit, try that one first. On newer Win10 versions try **Rogue Potato** (this was written in Dec 2020).
+**JuicyPotato** tends to work most often, so if the conditions fit, try that one first. On newer Win10 versions try **Rogue Potato** (current state 2020).
 
 Here is a list of the Potato Exploits, their release dates and the authors I could identify:
 

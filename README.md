@@ -38,10 +38,12 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 ## Web Exploitation
 
 - [SQL Injections](./web_exploitation/sql_injection.md)
+- [SQLMap](./web_exploitation/sqlmap.md)
 - [PHP](./web_exploitation/php.md)
+  - [Insecure File Uploads](./web_exploitation/php.md#file-upload-abuse)
   - [LFI / RFI](./web_exploitation/php.md#file-inclusions)
-- SQLMap
 - CSRF
+- SSRF
 - XSS
 
 ## Privilege Escalation
