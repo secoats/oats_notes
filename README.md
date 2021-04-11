@@ -19,11 +19,13 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 ## Essentials
 
 - [File Transfers](./file_transfers.md)
+- [SSH](./ssh.md)
+- [Hashes](./hashes.md)
 - Reverse Shell One-Liners
 - [Metasploit Framework](./metasploit.md)
 - [MSFVenom Cheatsheet](./msfvenom_cheatsheet.md)
 - Wordlists
-- [SSH](./ssh.md)
+- [MySQL](./mysql.md)
 
 ## Network Recon
 - [Nmap](./network_recon/nmap.md)

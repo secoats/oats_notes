@@ -46,6 +46,10 @@ If you know the hostname, then you can look for subdomains that serve different 
 wfuzz -c -Z -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -H "Host: FUZZ.host.com" --hc 200 --hw 356 -t 100 10.10.10.101
 ```
 
+If it always returns a 200 status code, then filter for the number of characters (`--hh <int>`) or the number of words (`--hw <int>`) of the default 200 OK response.
+
+Otherwise just filter for whatever error status code gets returned for a non-existing subdomain (`--hc 404`).
+
 ## Login Forms
 
 Like always google for exploits if you know the name of the webapp. Knowing the exact version helps as well, check sourcecode and HTTP response.

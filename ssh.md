@@ -1,21 +1,21 @@
 # SSH - Secure Shell
 
-* [Basic Usage](./ssh.md#basic-usage)
-* [Common Errors](./ssh.md#common-errors)
-* [Permanent Access](./ssh.md#permanent-access)
-* [Bruteforce](./ssh.md#bruteforce)
-* [SSH Key Bruteforcing](./ssh.md#ssh-key-bruteforcing)
-* [File Transfers](./ssh.md#file-transfers)
-* [Port Forwarding](./ssh.md#port-forwarding)
-    * [Local Forward](./ssh.md#local-forward)
-    * [Remote Forward](./ssh.md#remote-forward)
-* [Pivoting](./ssh.md#pivoting)
-    * [Single Port Forward](./ssh.md#pivoting-single-port-forward)
-    * [Dynamic SOCKS Proxy](./ssh.md#pivoting-dynamic-socks-proxy)
-        * [FoxyProxy and SOCKS](./ssh.md#foxyproxy-and-socks)
-        * [Burp and SOCKS](./ssh.md#burp-and-socks)
-        * [Proxychains](./ssh.md#proxychains)
-    * [Useful SSH Params](./ssh.md#pivoting-useful-ssh-params)
+* [Basic Usage](#basic-usage)
+* [Common Errors](#common-errors)
+* [Permanent Access](#permanent-access)
+* [Bruteforce](#bruteforce)
+* [SSH Key Bruteforcing](#ssh-key-bruteforcing)
+* [File Transfers](#file-transfers)
+* [Port Forwarding](#port-forwarding)
+    * [Local Forward](#local-forward)
+    * [Remote Forward](#remote-forward)
+* [Pivoting](#pivoting)
+    * [Single Port Forward](#pivoting-single-port-forward)
+    * [Dynamic SOCKS Proxy](#pivoting-dynamic-socks-proxy)
+        * [FoxyProxy and SOCKS](#foxyproxy-and-socks)
+        * [Burp and SOCKS](#burp-and-socks)
+        * [Proxychains](#proxychains)
+    * [Useful SSH Params](#pivoting-useful-ssh-params)
 
 
 ## Basic Usage
@@ -94,6 +94,8 @@ Host *
 
 ```
 
+* [Debian OpenSSL Predictable PRNG (CVE-2008-0166)](https://github.com/g0tmi1k/debian-ssh)
+
 ## Permanent Access
 
 Append your public key to ~/.ssh/authorized_keys
@@ -148,6 +150,19 @@ scp SourceFile user@host:directory/TargetFile
 ```
 
 ## Port Forwarding
+
+Useful SSH Params for Port Forwarding:
+
+```bash
+-L  #-- local forward
+-R  #-- remote forward
+-N  #-- don't open a shell
+-C  #-- compress connection (save bandwidth)
+-q  #-- quiet mode (don't print anything locally)
+-f  #-- fork to background process (you will need to use: kill <pid> to close the tunnel)
+-X  #-- set SOCKS version 4 / 5 (default is 5)
+```
+
 ### Local Forward
 ```bash
 # Local port forward
@@ -203,7 +218,7 @@ Either way the result will look like this:
 ⎡  Kali (you) ⎤               ⎡     TARGET     ⎤
 ⎜  10.1.1.42  ⎟ ==== LAN ==== ⎜    10.1.1.99   ⎟
 ⎜             ⎟               ⎜ Open: 22 (SSH) ⎟
-⎣ Open: 1337  ⎦  <- tunnel -> ⎣ Filtered: 3306 ⎦  
+⎣ Open: 1337  ⎦ <–––tunnel––> ⎣ Filtered: 3306 ⎦  
 ```
 
 Effectively it will look to you as if the MySQL database was running on your own machine on port 1337.
@@ -311,15 +326,16 @@ The result would look like this:
 ⎡ Kali (you) ⎤               ⎡      TARGET    ⎤
 ⎜  10.1.1.42 ⎟ ==== LAN ==== ⎜    10.1.1.99   ⎟
 ⎜            ⎟               ⎜ Open: 22 (SSH) ⎟
-⎣ Open:   80 ⎦  <- tunnel -> ⎣ Open:    10080 ⎦                        
+⎣ Open:   80 ⎦ <––tunnel–––> ⎣ Open:    10080 ⎦                        
 ```
 
-Wherein `10.1.1.99:10080` forwards to `10.1.1.42:80`.
+Wherein traffic directed to port `10080` on TARGET (10.1.1.99) gets forwarded to `10.1.1.42:80`.
 
 Now users on the TARGET can visit `http://127.0.0.1:10080` and they will see the files served by the web server running on `http://10.1.1.42:80` (Kali).
 
-Please note that the remote forward permissions are determined by the SSH config of the TARGET SSH server. 
-In the `/etc/ssh/sshd_config` of the TARGET you need to set `GatewayPorts yes` in order to bind a port globally (wildcard 0.0.0.0). Changing that config usually requires root access on TARGET.
+Please note that the remote forward permissions are determined by the SSH config of the TARGET SSH server. Which makes sense since the SSH server must open a listening port on the remote machine in order to create that forward.
+
+If you want to bind the opened port on TARGET globally (wildcard 0.0.0.0), then you will need to set `GatewayPorts yes` in the `/etc/ssh/sshd_config` of the TARGET machine. Changing that config usually requires root access on TARGET.
 
 When bound to 0.0.0.0, then anybody in the nework can visit `http://10.1.1.99:10080` in order to access the web server running on `http://10.1.1.42:80`.
 
@@ -343,6 +359,7 @@ In this scenario you cannot reach the **TARGET** host because the router firewal
 
 ⎡   Kali    ⎤                          ⎡   TARGET  ⎤
 ⎜ 10.1.1.42 ⎟ ========== X|X --------- ⎜ 10.8.8.77 ⎟
+⎜           ⎟                          ⎜           ⎟
 ⎣           ⎦                          ⎣ Port:  80 ⎦
 ```
 
@@ -359,18 +376,15 @@ Now you can use **BRIDGE** to access **TARGET** via port forwarding:
 
 ⎡    Kali   ⎤       ⎡   BRIDGE  ⎤       ⎡   TARGET  ⎤
 ⎜ 10.1.1.42 ⎟ ===== ⎜ 10.1.1.33 ⎟ ===== ⎜ 10.8.8.77 ⎟
-⎣           ⎦       ⎣ Port:  22 ⎦       ⎣ Port:  80 ⎦
+⎜           ⎟       ⎜ Port:  22 ⎟       ⎜           ⎟
+⎣           ⎦       ⎣           ⎦       ⎣ Port:  80 ⎦
 ```
 
 You can either set up a forward to a single port on 10.8.8.77 or you can set up a dynamic Proxy in order to access all of 10.8.8.0/24.
 
 ### Pivoting: Single Port Forward
 
-```bash
-⎡    Kali   ⎤       ⎡   BRIDGE  ⎤       ⎡   TARGET  ⎤
-⎜ 10.1.1.42 ⎟ ===== ⎜ 10.1.1.33 ⎟ ===== ⎜ 10.8.8.77 ⎟
-⎣ Port:8888 ⎦       ⎣ Port:  22 ⎦       ⎣ Port:  80 ⎦
-```
+Forward a single port using a bridge host.
 ```bash
 # Syntax
 ssh -N -L <localport>:<target>:<targethost> <user@bridge>
@@ -378,11 +392,18 @@ ssh -N -L <localport>:<target>:<targethost> <user@bridge>
 # Example
 ssh -N -L 8888:10.8.8.77:80 pippin@10.1.1.33
 ```
+```bash
+⎡    Kali   ⎤       ⎡   BRIDGE  ⎤       ⎡   TARGET  ⎤
+⎜ 10.1.1.42 ⎟ ===== ⎜ 10.1.1.33 ⎟ ===== ⎜ 10.8.8.77 ⎟
+⎜           ⎟       ⎜ Port:  22 ⎟       ⎜           ⎟
+⎣ Port:8888 ⎦ <–––––⎣–––tunnel––⎦–––––> ⎣ Port:  80 ⎦
+```
 
-Just to be clear, you execute that ssh command on Kali. This will open port 8888 on Kali.
+You execute that SSH command on Kali and it will open listening port 8888 on Kali.
 
-Now you can visit `http://127.0.0.1:8888` in your browser on Kali which will be forwarded to the HTTP server on 10.8.8.77:80 by the SSH server on BRIDGE.
+Now you can visit `http://127.0.0.1:8888` in your browser on Kali and your request will be forwarded to the HTTP server on 10.8.8.77:80 by the SSH server on BRIDGE.
 
+The rule of thumb is that if the SSH server on bridge can reach it, then you can forward it.
 
 ### Pivoting: Dynamic SOCKS Proxy
 
@@ -412,7 +433,9 @@ By default SSH will use the SOCKS 5 protocol for dynamic forwards, which support
 
 #### FoxyProxy and SOCKS
 
-After setting up a SOCKS proxy you can use **FoxyProxy** in your browser to create a SOCKS5 profile pointing to your SOCKS proxy at `localhost:1337`. 
+The **FoxyProxy** browser plugin allows you to use your SOCKS forward with your browser.
+
+In the FoxyProxy settings create a SOCKS5 profile pointing to your SOCKS proxy at `localhost:1337`. 
 
 Make sure to set the Proxy Type to "SOCKS" and not the default "HTTP".
 
@@ -421,16 +444,16 @@ With that proxy active you can reach any host in the 10.8.8.0/24 network. e.g. `
 
 #### Burp and SOCKS
 
-You can also set up **Burp** to use this SOCKS proxy. In Burp go to tab `User Options` and scroll to the bottom for SOCKS proxy settings. Set hostname and port to match your SOCKS forward.
+You can also configure **Burp** to use your SOCKS proxy. In Burp go to tab `User Options` and scroll to the bottom for SOCKS proxy settings. Set hostname and port to match your SOCKS forward.
 
-Once Burp is configured like that, you can use the your regular Burp HTTP FoxyProxy profile in your browser. The connection will go through Burp first and then through the SOCKS proxy.
+Once Burp is configured like that, you can use the your regular Burp HTTP FoxyProxy profile in your browser. The connection will go through Burp Proxy first and then through the SOCKS proxy.
 
 A lot of other programs and command line program support SOCKS proxies as well. Check the man pages of tools you need. 
 
 
 #### Proxychains
 
-For programs that do not support SOCKS proxies, take a look at **proxychains** or **proxychains-ng**. The regular proxychains is available on Kali.
+For programs that do not support SOCKS proxies, take a look at **proxychains** or **proxychains-ng**. The regular proxychains is available via apt on Kali Linux.
 
 After setting up the SOCKS proxy, edit `/etc/proxychains.conf`:
 ```bash
@@ -458,18 +481,6 @@ If you need to use a program that does not work with proxychains or if using pro
 
 Especially **long running scans** or **directory/password bruteforcing** should probably be done via single-port forward, not via dynamic SOCKS proxy. The major benefit of SOCKS is convenience, but not exactly speed.
 
-
-### Pivoting: Useful SSH Params
-
-```bash
-# -L  -- local forward
-# -R  -- remote forward
-# -N  -- don't open shell
-# -C  -- compress connection (save bandwidth)
-# -q  -- quiet mode (don't print anything locally)
-# -f  -- fork to background process (you will need to use: kill <pid>)
-# -X  -- set SOCKS version 4 / 5 (default is 5)
-```
 
 ## References
 

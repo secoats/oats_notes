@@ -1,16 +1,18 @@
 # Network Enum: SMB
 ```default
-    ________  ___      ___  _______   ___      ___       __         _______
-   /"       )|"  \    /"  ||   _  "\ |"  \    /"  |     /""\       |   __ "\
-  (:   \___/  \   \  //   |(. |_)  :) \   \  //   |    /    \      (. |__) :)
-   \___  \    /\  \/.    ||:     \/   /\   \/.    |   /' /\  \     |:  ____/
-    __/  \   |: \.        |(|  _  \  |: \.        |  //  __'  \    (|  /
-   /" \   :) |.  \    /:  ||: |_)  :)|.  \    /:  | /   /  \   \  /|__/ \
-  (_______/  |___|\__/|___|(_______/ |___|\__/|___|(___/    \___)(_______) and co.
- -----------------------------------------------------------------------------
+    ________  ___      ___  _______  
+   /"       )|"  \    /"  ||   _  "\ 
+  (:   \___/  \   \  //   |(. |_)  :)
+   \___  \    /\  \/.    ||:     \/  
+    __/  \   |: \.        |(|  _  \  
+   /" \   :) |.  \    /:  ||: |_)  :)
+  (_______/  |___|\__/|___|(_______/ 
+ ------------------------------------
 ```
 
 An overview of SMB enum tools and clients.
+
+## Table of Contents
 
 * [File Transfers](./smb.md#file-transfers)
 * [Smbclient](./smb.md#smbclient)
@@ -24,7 +26,7 @@ An overview of SMB enum tools and clients.
 * [Metasploit modules](./smb.md#metasploit-modules)
 
 
-Nmap command for SMB vuln scanning:
+**Nmap** command for SMB vuln scanning:
 
 ```bash
 sudo nmap -sV -p139,445 --script=smb-protocols,smb-vuln* $ip
@@ -79,6 +81,9 @@ smbclient -U anonymous -L //10.10.10.130
 smbclient -U anonymous //10.10.10.130/sharename
 smb: \> ls
 smb: \> get <file>
+
+# Null session
+smbclient -U ''%'' //10.10.10.130/sharename
 
 # NT errors fix for old SMB versions
 smbclient -p 139 -L //10.10.10.130/ --option='client min protocol=NT1'
@@ -172,6 +177,10 @@ smbmap -H 10.10.10.130
 smbmap -H 10.10.10.130 -u anonymous
 smbmap -H 10.10.10.130 -u Guest
 smbmap -H 10.10.10.130 -u null
+
+# Null session
+smbmap -H 10.10.10.219 -P 445
+smbmap -H 10.10.10.219 -u '' -p '' -P 445
 
 # show files of shares that are at least read-only
 smbmap -H 10.10.10.130 -u anonymous -r --depth 5
