@@ -151,6 +151,11 @@ Pop calc:
 msfvenom -p windows/exec CMD=calc.exe -b '\x00\x0A\x0D' -f c
 ```
 
+Shellcode variable name:
+```bash
+-v payload
+```
+
 ## References
 
 * https://github.com/rapid7/metasploit-framework/wiki/How-to-use-msfvenom

@@ -149,6 +149,24 @@ wmic printer list brief
 ps> Get-Printer | Format-List
 ```
 
+## Drives
+
+List drives:
+
+```powershell
+# cmd / general
+wmic logicaldisk get name
+wmic logicaldisk get caption
+wmic logicaldisk get deviceid, volumename, description
+fsutil fsinfo drives
+list volume
+
+# powershell
+get-psdrive -psprovider filesystem
+```
+
+
+
 ## Stored Credentials
 
 Make sure to re-check these whenever you gain access to a new user/session.
@@ -295,12 +313,12 @@ Also check **directories served by FTP or SMB**.
 dir C:\$Recycle.Bin /s /b
 ```
 
-### Alternative Data Streams
+### Alternate Data Streams
 
-A somewhat obscure way to hide files are NTFS Alternative Data streams. It's unlikely that you will encounter these in the wild, but I have seen them in CTFs before.
+A somewhat obscure way to hide files are NTFS Alternate Data streams. It's unlikely that you will encounter these in the wild, but I have seen them in CTFs before.
 
 ```powershell
-# show alternative data streams
+# show alternate data streams
 dir /R
 
 # print content of data stream
@@ -457,6 +475,12 @@ Just copy it over and execute it. You should receive a reverse shell as SYSTEM.
 ## AutoStart Abuse
 
 Look for registry entries for autostart:
+
+* HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run
+* KEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+* HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce
+* HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce
+
 
 ```powershell
 reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run

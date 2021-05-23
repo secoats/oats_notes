@@ -57,12 +57,13 @@ Like always google for exploits if you know the name of the webapp. Knowing the 
 1. Try `admin:admin`
 2. Try `admin:password`
 3. Try `admin:<application_name>`
-4. Check for SQL Injections
-5. Google for default credentials (with name of the webapp) 
-6. Check for "username is wrong" type info leaks (also check "forgot password?" for this)
-7. Search for possible usernames on the wider site ("About Us", ssl cert, github, social media, etc.)
-8. Try to create a low privilege user. Enumerate username-format, password requirements, etc. Also even low priv users sometimes can see sensitive data.
-9. Check password reset rules
+4. Check source code of both login and register pages for hidden form elements and commented out lines
+5. Check for SQL Injections
+6. Google for default credentials (with name of the webapp) 
+7. Check for "username is wrong" type info leaks (also check "forgot password?" for this)
+8. Search for possible usernames on the wider site ("About Us", ssl cert, github, social media, etc.)
+9. Try to create a low privilege user. Enumerate username-format, password requirements, etc. Also even low priv users sometimes can see sensitive data.
+10. Check password reset rules 
 
 If you managed to create a low privilege user, make sure to check newly accessible pages and params for vulns.
 

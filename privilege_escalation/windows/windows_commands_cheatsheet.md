@@ -111,7 +111,7 @@ dir /s *pass* == *.config
 ```
 
 ```powershell
-# NTFS Alternative Data Streams
+# NTFS Alternate Data Streams
 dir /R
 more < somefile.txt:hiddenproof.txt
 type somebinary.exe > somefile.txt:hiddenbinary.exe

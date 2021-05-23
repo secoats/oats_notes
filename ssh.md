@@ -16,6 +16,7 @@
         * [Burp and SOCKS](#burp-and-socks)
         * [Proxychains](#proxychains)
     * [Useful SSH Params](#pivoting-useful-ssh-params)
+* [Chisel](#chisel
 
 
 ## Basic Usage
@@ -480,6 +481,31 @@ Once you have confirmed which ports are open, use focused nmap service scans on 
 If you need to use a program that does not work with proxychains or if using proxies is not feasible, then just create a single port forward ([see above](#pivoting-single-port-forward)) to access a single remote service.
 
 Especially **long running scans** or **directory/password bruteforcing** should probably be done via single-port forward, not via dynamic SOCKS proxy. The major benefit of SOCKS is convenience, but not exactly speed.
+
+
+## Chisel
+
+Chisel creates tunnels without requiring SSH. Meterpreter can do this as well, but if you don't want to use it for some reason, then chisel is your best choice.
+
+* Download (go to Releases): https://github.com/jpillora/chisel
+
+For example, if you wanted to forward a service running on port 8888 on a Windows target machine to your local Kali machine:
+
+Start the server on Kali with the reverse parameter:
+
+```bash
+./chisel_64_lin server --port 5555 --reverse
+```
+
+On the target start the client:
+
+```powershell
+.\chisel_64_win.exe client --max-retry-count 4 --fingerprint <base64_here> 10.10.0.42:5555 R:8888:localhost:8888
+```
+
+Here `10.10.0.42:5555` is the chisel server running on Kali. 
+
+Port 8888 should now be open on Kali and allow you to access the service running on port 8888 on the target.
 
 
 ## References
