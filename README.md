@@ -78,4 +78,4 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 
 ## Active Directory
 
-- stuff
+- [AD Network Recon](./active_directory/ad_network_recon.md)
