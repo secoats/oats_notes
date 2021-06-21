@@ -16,7 +16,7 @@
         * [Burp and SOCKS](#burp-and-socks)
         * [Proxychains](#proxychains)
     * [Useful SSH Params](#pivoting-useful-ssh-params)
-* [Chisel](#chisel
+* [Chisel](#chisel)
 
 
 ## Basic Usage

