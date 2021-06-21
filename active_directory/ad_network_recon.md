@@ -74,6 +74,7 @@ Check smb and winrm login spray if the ports are open (smb 139/445; winrm 5985).
 msf> use scanner/winrm/winrm_login
 msf> use scanner/smb/smb_login
 msf> use auxiliary/scanner/ftp/ftp_login
+msf> use auxiliary/scanner/ssh/ssh_login
 
 # useful settings to turn on
 set BLANK_PASSWORDS true

