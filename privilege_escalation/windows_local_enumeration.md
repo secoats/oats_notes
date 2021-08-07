@@ -333,14 +333,7 @@ type somebinary.exe > somefile.txt:hiddenbinary.exe
 If you want to transfer binaries or scripts to the target, then you will need a place where you can put them. Otherwise you will need to work in memory only. 
 You might have already found one in the previous section, if so then you can skip this.
 
-```powershell
-# A simple test is: 
-echo test>test.txt
-dir /a
-# is there a test.txt?
-```
-
-But you can of course also check the directory permissions with icacls or accesschk.exe.
+Common writable locations:
 
 ```powershell
 # Common Temp dir locations
@@ -351,6 +344,35 @@ C:\Windows\TEMP
 %USERPROFILE%\AppData\Local\Temp\
 %USERPROFILE%\AppData\Local\Temp\Low\
 ```
+
+```powershell
+C:\Windows\Tasks
+C:\Windows\Temp
+C:\windows\tracing
+C:\Windows\Registration\CRMLog
+C:\Windows\System32\FxsTmp
+C:\Windows\System32\com\dmp
+C:\Windows\System32\Microsoft\Crypto\RSA\MachineKeys
+C:\Windows\System32\spool\PRINTERS
+C:\Windows\System32\spool\SERVERS
+C:\Windows\System32\spool\drivers\color
+C:\Windows\System32\Tasks\Microsoft\Windows\SyncCenter
+C:\Windows\SysWOW64\FxsTmp
+C:\Windows\SysWOW64\com\dmp
+C:\Windows\SysWOW64\Tasks\Microsoft\Windows\SyncCenter
+C:\Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System
+```
+
+A simple check is:
+
+```powershell
+echo test>test.txt
+dir /a
+# is there a test.txt?
+```
+
+But you can of course also check the directory permissions with icacls or accesschk.exe.
+
 
 ```powershell
 # Search for writable locations

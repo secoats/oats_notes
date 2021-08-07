@@ -23,7 +23,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - [Hashes](./hashes.md)
 - [Metasploit Framework](./metasploit.md)
 - [MSFVenom Cheatsheet](./msfvenom_cheatsheet.md)
-- Reverse Shell One-Liners
+- [Reverse Shell One-Liners](./reverse_shells.md)
 - Wordlists
 - [MySQL](./mysql.md)
 - [Shell Upgrades](./shell_upgrades.md)
