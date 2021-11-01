@@ -73,6 +73,30 @@ command > /dev/null
 command 2> /dev/null
 ```
 
+## Symlinks
+
+```bash
+# directory symlink
+ln -s <source> <target>
+ln -s /home/target/.ssh/ /tmp/blub/loot
+```
+
+It is important that you add a trailing slash after the source directory.
+
+```bash
+# file symlink
+ln -s <source> <target>
+ln -s /home/james/transactions.txt /tmp/blub/trans.txt
+```
+
+Remove a symlink like so:
+
+```bash
+# remove symlink
+unlink <path_to_symlink>
+unlink /tmp/blub/trans.txt
+```
+
 ## User Management
 
 ```bash

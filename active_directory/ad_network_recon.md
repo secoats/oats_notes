@@ -81,6 +81,14 @@ set BLANK_PASSWORDS true
 set USER_AS_PASS true
 ```
 
+## Responder
+
+NBT-NS/LLMNR Responder and Cross-Protocol NTLM Relay.
+
+```bash
+sudo responder -I tun0 -A
+```
+
 ## Impacket Toolkit
 
 DCE/RPC SAMR dumper. Useful for finding users and domains:

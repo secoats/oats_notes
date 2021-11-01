@@ -59,6 +59,34 @@ Sort list. Get unique elements in list.
 | Sort-Object | Get-Unique
 ```
 
+
+## History
+
+
+```powershell
+C:\Users\<alias>\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+%userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+
+C:\Users\<alias>\AppData\Local\Microsoft\AzureAD\Powershell\AzureADPowershell_<sessionStartTimeStamp>.log
+```
+
+## Run as another User
+
+```powershell
+$env:ComputerName
+CONTROL
+
+$username = "CONTROL\hector"
+$password = "l33th4x0rhector"
+$secstr = New-Object -TypeName System.Security.SecureString
+$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
+$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr
+
+
+Invoke-Command -Computer localhost -Credential $cred -ScriptBlock { whoami }
+CONTROL\hector
+```
+
 ## Enumeration
 
 

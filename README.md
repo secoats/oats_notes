@@ -35,6 +35,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
     - Nikto
     - Wordpress and xmlrpc
 - [SMB](./network_recon/smb.md)
+- [Email Servers](./network_recon/email_servers.md)
 - DNS
 - Other Tools
 
@@ -50,8 +51,8 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - XSS
 
 ## Privilege Escalation
-- [Linux Local Enumeration](./privilege_escalation/linux_local_enumeration.md)
-  - [Commands Cheatsheet: Linux](./privilege_escalation/linux/linux_commands_cheatsheet.md)
+- [Linux Local Enumeration Checklist](./privilege_escalation/linux_local_enumeration.md)
+  - [Linux Commands](./privilege_escalation/linux/linux_commands_cheatsheet.md)
   - Linux Enum Scripts
   - [SUDO](./privilege_escalation/linux/sudo.md)
   - [Cron](./privilege_escalation/linux/cron.md)
@@ -59,8 +60,8 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
   - [Service Exploits](./privilege_escalation/linux/services.md)
   - [NFS](./privilege_escalation/linux/nfs.md)
 
-- [Windows Local Enumeration](./privilege_escalation/windows_local_enumeration.md)
-  - [Commands Cheatsheet: Windows](./privilege_escalation/windows/windows_commands_cheatsheet.md)
+- [Windows Local Enumeration Checklist](./privilege_escalation/windows_local_enumeration.md)
+  - [Windows Commands](./privilege_escalation/windows/windows_commands_cheatsheet.md)
   - Windows Enum Scripts
   - [Service Exploitation](./privilege_escalation/windows/services.md)
   - [Potatoes](./privilege_escalation/windows/potatoes.md)

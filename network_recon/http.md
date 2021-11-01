@@ -40,15 +40,36 @@ See the wordlist cheatsheet for wordlists.
 
 ## Subdomain Fuzzing
 
-If you know the hostname, then you can look for subdomains that serve different content.
+If you know the domain name of the target, then you can look for subdomains that serve different content.
 
 ```default
-wfuzz -c -Z -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -H "Host: FUZZ.host.com" --hc 200 --hw 356 -t 100 10.10.10.101
+wfuzz -c -Z -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -H "Host: FUZZ.host.com" --hc 200 --hw 356 -t 16 10.10.10.101
 ```
 
 If it always returns a 200 status code, then filter for the number of characters (`--hh <int>`) or the number of words (`--hw <int>`) of the default 200 OK response.
 
 Otherwise just filter for whatever error status code gets returned for a non-existing subdomain (`--hc 404`).
+
+
+## Exif Data
+
+Image and PDF files can contain metadata with potentially useful information like the creator username (possible target / username format), location data, operating system and image editing program.
+
+Exiftool (included in kali) will list this information for you:
+
+```bash
+exiftool <filename>
+
+# example: only show creators of all files in current directory
+exiftool * | grep -i Creator | sort -u
+
+# example: get exif data of network url
+curl -s http://domain.example/bigfile.jpg | exiftool -fast -
+
+# convenient for many urls
+export EXIFTARGET='http://domain.example/bigfile.jpg'
+curl -s $EXIFTARGET | exiftool -fast -
+```
 
 ## Login Forms
 
