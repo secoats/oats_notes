@@ -89,6 +89,18 @@ NBT-NS/LLMNR Responder and Cross-Protocol NTLM Relay.
 sudo responder -I tun0 -A
 ```
 
+Cracking ntlmv2 hashes:
+```bash
+.\hashcat64.exe -m 5600 -a 0 ./ntlmv2_example.txt .\rockyou.txt
+.\hashcat64.exe -m 5600 -a 3 ./ntlmv2_example.txt -1?a ?1?1?1?1?1?1?1?1 --increment
+```
+
+Take the ntlmv2 hash as is from responder (with name and everything).
+
+```bash
+bob::SERVER:b9c93460a632fd2e:61656E7AF21DCE8D3D6B2A1A81172509:0101000000000000B1085B524CD8D70132F5B52DDAF92EBF0000000002000400270027000000000000000000
+```
+
 ## Impacket Toolkit
 
 DCE/RPC SAMR dumper. Useful for finding users and domains:
