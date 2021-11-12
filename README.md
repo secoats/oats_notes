@@ -51,6 +51,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
   - [Insecure File Uploads](./web_exploitation/php.md#file-upload-abuse)
   - [LFI / RFI](./web_exploitation/php.md#file-inclusions)
 - [Server-side Template Injections](./web_exploitation/serverside_template_injection.md)
+- [Path Traversal](./web_exploitation/path_traversal.md)
 - CSRF
 - SSRF
 - XSS
