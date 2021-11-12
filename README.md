@@ -39,6 +39,10 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - DNS
 - Other Tools
 
+## Misc
+
+- Office Macros
+
 ## Web Exploitation
 
 - [SQL Injections](./web_exploitation/sql_injection.md)
@@ -46,6 +50,7 @@ I am slowly collecting and cleaning these up for my own use. Maybe they are usef
 - [PHP](./web_exploitation/php.md)
   - [Insecure File Uploads](./web_exploitation/php.md#file-upload-abuse)
   - [LFI / RFI](./web_exploitation/php.md#file-inclusions)
+- [Server-side Template Injections](./web_exploitation/serverside_template_injection.md)
 - CSRF
 - SSRF
 - XSS

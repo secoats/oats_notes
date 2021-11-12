@@ -28,6 +28,15 @@ whatweb --color=never --no-errors -a 3 -v https://10.0.0.42:443
 **Google the server name and version for vulnerabilites. Do the same for found scripting engines (PHP version, etc.)**
 
 ## Dir Fuzzing
+
+Gobuster:
+
+```bash
+gobuster dir -u http://10.10.10.13/ -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt
+```
+
+Wfuzz:
+
 ```bash
 # 404 based
 wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hc 404 http://10.10.10.13/FUZZFUZ2Z
@@ -36,7 +45,21 @@ wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hc 404 http:/
 wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hw 42 http://10.10.10.13/FUZZFUZ2Z
 ```
 
-See the wordlist cheatsheet for wordlists.
+See the wordlist cheatsheet for wordlists. 
+
+Directory Wordlist Examples:
+
+* /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt
+* /usr/share/seclists/Discovery/Web-Content/SVNDigger/all-dirs.txt
+
+Extensions:
+
+* /usr/share/seclists/Discovery/Web-Content/web-extensions.txt
+
+Mixed (files and directories):
+
+* /usr/share/seclists/Discovery/Web-Content/common.txt
+* /usr/share/seclists/Discovery/Web-Content/SVNDigger/all.txt
 
 ## Subdomain Fuzzing
 
