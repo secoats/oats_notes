@@ -45,7 +45,7 @@ wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hc 404 http:/
 wfuzz -Z -c -w <wordlist_no_extensions> -w <wordlist_extensions> --hw 42 http://10.10.10.13/FUZZFUZ2Z
 ```
 
-See the wordlist cheatsheet for wordlists. 
+See the wordlist cheatsheet for wordlists. The following examples are pre-installed on kali or from [seclists](https://github.com/danielmiessler/SecLists).
 
 Directory Wordlist Examples:
 
@@ -186,6 +186,112 @@ cewl -d 2 -m 5 -w wordlist_output.txt https://example.com
 ## depth = 2
 ## minimum length = 5
 ```
+
+## Manual Parameter Testing with FFUF
+
+* ffuf - https://github.com/ffuf/ffuf
+
+Example wordlists: 
+
+* Mixed relevant vulns (small, no xss): https://github.com/secoats/cereal_fuzzlists/blob/master/vuln_detect_small_oats.txt
+* Mixed relevant vulns (no whitespace, small, no xss): https://github.com/secoats/cereal_fuzzlists/blob/master/vuln_detect_small_nowhitespace_oats.txt
+* XSS: https://github.com/payloadbox/xss-payload-list
+* SQLi: https://github.com/xmendez/wfuzz/blob/master/wordlist/Injections/SQL.txt
+* Command Injection: https://github.com/payloadbox/command-injection-payload-list
+
+You are looking for errors or changed reflections of input in the output.
+
+Let's say you found some suspicious GET url parameter `?sus=something` or POST body parameter `foo=something&bar=somethingelse`.
+
+Capture the request in Burp and save it to a file.
+
+GET request captured example:
+
+```default
+GET /index.php?show=FUZZ HTTP/1.1
+Host: 127.0.0.1:8888
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+Accept: */*
+Connection: close
+
+```
+
+POST request captured example (x-www-form-urlencoded):
+
+```default
+POST /login.php HTTP/1.1
+Host: 127.0.0.1:8888
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Connection: close
+
+user=FUZZ&pass=whatever
+```
+
+FFUF commands examples:
+
+```bash
+# captured (http)
+ffuf -v -mc all -request ./capture.txt -request-proto http -w ./vuln_detect_small_oats.txt
+
+# captured (https)
+ffuf -v -mc all -request ./capture.txt -request-proto https -w ./vuln_detect_small_oats.txt
+
+# Run through Burp proxy
+-x http://localhost:8080 
+
+# request protocol
+-request-proto http
+-request-proto https
+
+# config file
+-config ./test_config.txt
+```
+
+Because you will have to feed a large number of config options into ffuf, I recommend that you use a config file for testing instead:
+
+* [All FFUF config options](https://github.com/ffuf/ffuf/blob/master/ffufrc.example)
+
+```default
+[http]
+    proxyurl = "http://127.0.0.1:8080"
+
+[general]
+    colors = true
+    verbose = true
+    delay = ""
+    maxtime = 0
+    maxtimejob = 0
+    quiet = false
+    rate = 0
+    stopon403 = false
+    stoponall = false
+    stoponerrors = false
+    threads = 40
+
+[input]
+    request = "capture_post.txt"
+    requestproto = "http"
+
+[output]
+    debuglog = "debug.log"
+    outputfile = "output.json"
+    outputformat = "json"
+    outputcreateemptyfile = false
+
+[matcher]
+    status = "all"
+```
+
+Note that the above config uses burp proxy and writes to a json output file. Just remove those options if you don't need them.
+
+```bash
+# Command with config file:
+ffuf -config ./test_config.txt -w ./vuln_detect_small_oats.txt:FUZZ
+```
+
+After running the test cases you should look at the response bodies in burp.
 
 ## Common Vulns
 
